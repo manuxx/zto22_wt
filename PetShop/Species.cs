@@ -18,5 +18,15 @@ namespace Training.DomainClasses
             this.estimatedLenOfLife = estimatedLenOfLife;
             this.environment = environment;
         }
+        
+        protected bool Equals(Species other)
+        {
+            return estimatedLenOfLife == other.estimatedLenOfLife && environment == other.environment;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(estimatedLenOfLife, (int) environment);
+        }
     }
 }

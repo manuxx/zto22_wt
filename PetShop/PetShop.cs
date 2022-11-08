@@ -1,8 +1,9 @@
-using System;
 using System.Collections.Generic;
 
 namespace Training.DomainClasses
 {
+    using System.Linq;
+
     public class PetShop
     {
         private IList<Pet> _petsInTheStore;
@@ -19,6 +20,10 @@ namespace Training.DomainClasses
 
         public void Add(Pet newPet)
         {
+            if (Enumerable.Contains(_petsInTheStore, newPet))
+                return;
+         
+            _petsInTheStore.Add(newPet);
         }
     }
 }
