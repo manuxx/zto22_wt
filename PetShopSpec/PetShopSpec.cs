@@ -107,5 +107,4 @@ namespace Training.Specificaton
         It invalid_cast_exception_should_be_thrown = () => exception.ShouldBeOfExactType<InvalidCastException>();
     }
 
-
 }
