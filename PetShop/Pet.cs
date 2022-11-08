@@ -28,5 +28,10 @@ namespace Training.DomainClasses
             var other = (Pet)obj;
             return this.Equals(other);
         }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(name, yearOfBirth, price, species);
+        }
     }
 }
