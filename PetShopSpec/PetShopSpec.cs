@@ -99,10 +99,13 @@ namespace Training.Specificaton
         Establish c = () => pet_initial_content.AddManyItems(new Pet { name = "Pixie" }, new Pet { name = "Dixie" });
         Because b = () =>
         {
-            IEnumerable<Pet> returned_pets = subject.AllPets();
+            var returned_pets = subject.AllPets();
+            foreach (var pet in returned_pets)
+            {
+                pet.name = "changed";
+            }
             exception = Catch.Exception(() => { var x = (ICollection<Pet>)returned_pets; });
         };
-        private static IEnumerable<Pet> returned_collection_of_pets;
         private static Exception exception;
         It invalid_cast_exception_should_be_thrown = () => exception.ShouldBeOfExactType<InvalidCastException>();
     }
