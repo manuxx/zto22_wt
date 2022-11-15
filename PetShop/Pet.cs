@@ -39,5 +39,10 @@ namespace Training.DomainClasses
         public int yearOfBirth { get; set; }
         public float price { get; set; }
         public Species species { get; set; }
+
+        public override string ToString()
+        {
+            return $"{nameof(name)}: {name}, {nameof(species)}: {species}, {nameof(sex)}: {sex}, {nameof(yearOfBirth)}: {yearOfBirth}, {nameof(price)}: {price}";
+        }
     }
 }
