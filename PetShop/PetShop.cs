@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Training.DomainClasses
 {
-    public class PetShop
+    public partial class PetShop
     {
         private IList<Pet> _petsInTheStore;
 
@@ -14,7 +14,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPets()
         {
-            return GetMatchingPets(pet => true);
+            return new ReadOnlySet<Pet>(_petsInTheStore);
         }
 
         public void Add(Pet newPet)
