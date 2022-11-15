@@ -86,7 +86,7 @@ namespace Training.DomainClasses
             }
         }
         
-        private IEnumerable<Pet> EachPet(IList<Pet> collection)
+        private static IEnumerable<Pet> EachPet(IList<Pet> collection)
         {
             foreach (var pet in collection)
             {
