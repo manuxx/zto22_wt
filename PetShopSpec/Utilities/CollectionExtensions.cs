@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace Training.Specificaton
 {
+    using System;
+
     public static class CollectionExtensions
     {
         public static void AddManyItems<T>(this ICollection<T> collection, params T[] itemsToAdd)
