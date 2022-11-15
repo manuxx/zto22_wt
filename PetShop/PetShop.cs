@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Training.DomainClasses;
 
 namespace Training.DomainClasses
 {
@@ -15,10 +16,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPets()
         {
-            foreach (var pet in _petsInTheStore)
-            {
-                yield return pet;
-            }
+            return new ReadOnlySet<Pet>(_petsInTheStore);
         }
 
         public IEnumerable<Pet> AllCats()
