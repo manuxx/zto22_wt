@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Training.DomainClasses
 {
@@ -32,6 +33,11 @@ namespace Training.DomainClasses
         public static bool operator !=(Pet left, Pet right)
         {
             return !Equals(left, right);
+        }
+
+        public override string ToString()
+        {
+            return $"Pet: {name}";
         }
 
         public Sex sex;
