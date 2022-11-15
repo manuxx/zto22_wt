@@ -79,7 +79,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> GetMatchingPets(Func<Pet, bool> condition)
         {
-            foreach (var pet in Utils.EachElement(_petsInTheStore))
+            foreach (var pet in _petsInTheStore.EachElement())
             {
                 if (condition(pet))
                     yield return pet;
