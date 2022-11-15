@@ -74,7 +74,7 @@ namespace Training.DomainClasses
         
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
-            return GetMatchingPets(pet => pet.yearOfBirth > 2010 || pet.species == Species.Rabbit);
+            return GetMatchingPets(pet => pet.yearOfBirth > 2011 || pet.species == Species.Rabbit);
         }
 
         public IEnumerable<Pet> GetMatchingPets(Func<Pet, bool> condition)
