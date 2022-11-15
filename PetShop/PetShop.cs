@@ -14,10 +14,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPets()
         {
-            foreach (var pet in _petsInTheStore)
-            {
-                yield return pet;
-            }
+            return GetMatchingPets(pet => true);
         }
 
         public void Add(Pet newPet)
@@ -30,14 +27,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllCats()
         {
-            foreach (var pet in _petsInTheStore)
-            {
-                if (pet.species == Species.Cat)
-                {
-                    yield return pet;
-                }
-            }
-
+            return GetMatchingPets(pet => pet.species == Species.Cat);
         }
 
         public IEnumerable<Pet> AllPetsSortedByName()
@@ -49,86 +39,49 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllMice()
         {
-            foreach (var pet in _petsInTheStore)
-            {
-                if (pet.species == Species.Mouse)
-                {
-                    yield return pet;
-                }
-            }
+            return GetMatchingPets(pet => pet.species == Species.Mouse);
         }
 
         public IEnumerable<Pet> AllFemalePets()
         {
-            foreach (var pet in _petsInTheStore)
-            {
-                if (pet.sex == Sex.Female)
-                {
-                    yield return pet;
-                }
-            }
+            return GetMatchingPets(pet => pet.sex == Sex.Female);
         }
         
         public IEnumerable<Pet> AllCatsOrDogs()
         {
-            foreach (var pet in _petsInTheStore)
-            {
-                if (pet.species == Species.Cat || pet.species == Species.Dog)
-                {
-                    yield return pet;
-                }
-            }
+            return GetMatchingPets(pet => pet.species == Species.Cat || pet.species == Species.Dog);
         }
         
         public IEnumerable<Pet> AllPetsButNotMice()
         {
-            foreach (var pet in _petsInTheStore)
-            {
-                if (pet.species != Species.Mouse)
-                {
-                    yield return pet;
-                }
-            }
+            return GetMatchingPets(pet => pet.species != Species.Mouse);
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2010()
         {
-            foreach (var pet in _petsInTheStore)
-            {
-                if (pet.yearOfBirth > 2010)
-                {
-                    yield return pet;
-                }
-            }
+            return GetMatchingPets(pet => pet.yearOfBirth > 2010);
         }
         
         public IEnumerable<Pet> AllDogsBornAfter2010()
         {
-            foreach (var pet in _petsInTheStore)
-            {
-                if (pet.species == Species.Dog && pet.yearOfBirth > 2010)
-                {
-                    yield return pet;
-                }
-            }
+            return GetMatchingPets(pet => pet.species == Species.Dog && pet.yearOfBirth > 2010);
         }
 
         public IEnumerable<Pet> AllMaleDogs()
         {
-            foreach (var pet in _petsInTheStore)
-            {
-                if (pet.species == Species.Dog && pet.sex == Sex.Male)
-                {
-                    yield return pet;
-                }
-            }
+            return GetMatchingPets(pet => pet.sex == Sex.Male && pet.species == Species.Dog);
         }
         
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
+            return GetMatchingPets(pet => pet.yearOfBirth > 2010 || pet.species == Species.Rabbit);
+        }
+
+        public IEnumerable<Pet> GetMatchingPets(Func<Pet, bool> condition)
+        {
             foreach (var pet in _petsInTheStore)
             {
-                if (pet.yearOfBirth > 2011 || pet.species == Species.Rabbit)
+                if (condition(pet))
                 {
                     yield return pet;
                 }
