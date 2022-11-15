@@ -1,5 +1,6 @@
 using System;
 using System.Buffers;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Training.DomainClasses
@@ -15,7 +16,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPets()
         {
-            return new ReadOnlySet(_petsInTheStore);
+            return new ReadOnlySet<Pet>(_petsInTheStore);
         }
 
         public void Add(Pet newPet)
@@ -87,6 +88,32 @@ namespace Training.DomainClasses
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
             return GetMatchingPets(pet => pet.yearOfBirth > 2011 || pet.species == Species.Rabbit);
+        }
+    }
+
+    public class ReadOnlySet<IItem> : IEnumerable<IItem>
+    {
+        private readonly IEnumerable<IItem> _pets;
+
+        public ReadOnlySet(IEnumerable<IItem> pets)
+        {
+            _pets = pets;
+        }
+
+        public IEnumerator<IItem> GetEnumerator()
+        {
+            foreach (var pet in _pets)
+            {
+                yield return pet;
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            foreach (var pet in _pets)
+            {
+                yield return pet;
+            }
         }
     }
 }
