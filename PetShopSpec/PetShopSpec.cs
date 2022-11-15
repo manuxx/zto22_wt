@@ -196,6 +196,7 @@ namespace Training.Specificaton
         protected static Pet dog_Pluto;
     }
 
+
     public class when_searching_for_pets : concern_with_pets_for_sorting_and_filtering
     {
         private It should_be_able_to_find_all_cats = () =>
@@ -203,9 +204,11 @@ namespace Training.Specificaton
             var foundPets = subject.AllCats();
             foundPets.ShouldContainOnly(cat_Tom, cat_Jinx);
         };
+
+
     }
 
-    [Ignore("this will be implemented 2nd")]
+
     class when_sorting_pets : concern_with_pets_for_sorting_and_filtering
     {
         It should_be_able_to_sort_by_name_ascending = () =>
