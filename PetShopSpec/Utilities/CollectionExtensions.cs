@@ -17,6 +17,5 @@ namespace Training.Specificaton
             while (enumerator.MoveNext()) cnt++;
             return cnt;
         }
-
     }
 }

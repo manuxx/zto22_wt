@@ -9,17 +9,22 @@ namespace Training.DomainClasses
 
         public PetShop(IList<Pet> petsInTheStore)
         {
-            _petsInTheStore = petsInTheStore;
+            this._petsInTheStore = petsInTheStore;
         }
 
         public IEnumerable<Pet> AllPets()
         {
-            return _petsInTheStore;
+            foreach (var pet in _petsInTheStore)
+            {
+                yield return pet;
+            }
         }
 
         public void Add(Pet newPet)
         {
-            if (_petsInTheStore.Contains(newPet)) return;
+            if (_petsInTheStore.Contains(newPet))
+                return;
+
             _petsInTheStore.Add(newPet);
         }
     }
