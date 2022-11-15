@@ -210,43 +210,41 @@ namespace Training.Specificaton
             var foundPets = subject.AllMice();
             foundPets.ShouldContainOnly(mouse_Dixie, mouse_Jerry);
         };
-        [Ignore("Will be implemented next")]
+
         private It should_be_able_to_find_all_female_pets = () =>
         {
             var foundPets = subject.AllFemalePets();
             foundPets.ShouldContainOnly(dog_Lassie, mouse_Dixie);
         };
-        [Ignore("Will be implemented next")]
         private It should_be_able_to_find_all_cats_or_dogs = () =>
         {
             var foundPets = subject.AllCatsOrDogs();
             foundPets.ShouldContainOnly(cat_Tom, cat_Jinx, dog_Huckelberry, dog_Lassie, dog_Pluto);
         };
-        [Ignore("Will be implemented next")]
         private It should_be_able_to_find_all_pets_but_not_mice = () =>
         {
             var foundPets = subject.AllPetsButNotMice();
             foundPets.ShouldContainOnly(cat_Tom, cat_Jinx, dog_Huckelberry, dog_Lassie, dog_Pluto, rabbit_Fluffy);
         };
-        [Ignore("Will be implemented next")]
+
         private It should_be_able_to_find_all_pets_born_after_2010 = () =>
         {
             var foundPets = subject.AllPetsBornAfter2010();
             foundPets.ShouldContainOnly(dog_Pluto, rabbit_Fluffy, mouse_Dixie, mouse_Jerry);
         };
-        [Ignore("Will be implemented next")]
+
         private It should_be_able_to_find_all_young_dogs = () =>
         {
             var foundPets = subject.AllDogsBornAfter2010();
             foundPets.ShouldContainOnly(dog_Pluto);
         };
-        [Ignore("Will be implemented next")]
+
         private It should_be_able_to_find_all_male_dogs = () =>
         {
             var foundPets = subject.AllMaleDogs();
             foundPets.ShouldContainOnly(dog_Huckelberry, dog_Pluto);
         };
-        [Ignore("Will be implemented next")]
+
         private It should_be_able_to_find_all_young_pets_or_rabbits = () =>
         {
             var foundPets = subject.AllPetsBornAfter2011OrRabbits();
@@ -256,10 +254,6 @@ namespace Training.Specificaton
 
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 5f2b2a7bc34b6e5e697e8c64ffa2d6faa12acc94
     class when_sorting_pets : concern_with_pets_for_sorting_and_filtering
     {
         It should_be_able_to_sort_by_name_ascending = () =>
