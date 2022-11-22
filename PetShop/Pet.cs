@@ -1,4 +1,5 @@
 using System;
+using PetShop;
 
 namespace Training.DomainClasses
 {
@@ -61,9 +62,25 @@ namespace Training.DomainClasses
             return pet => pet.species != species;
         }
 
-        public static Predicate<Pet> IsBornAfter(int year)
+        public static ICriteria<Pet> IsBornAfter(int year)
         {
-            return pet => pet.yearOfBirth > year;
+            return new BornAfterCriteria(year);
+        }
+    }
+
+    public class BornAfterCriteria : ICriteria<Pet>
+    {
+        private readonly int _year;
+
+        public BornAfterCriteria(int year)
+        {
+            this._year = year;
+        }
+
+
+        public bool IsSatisfiedBy(Pet item)
+        {
+            return item.yearOfBirth > _year;
         }
     }
 }
