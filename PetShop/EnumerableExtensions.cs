@@ -14,13 +14,7 @@ static class EnumerableExtensions
 
     public static IEnumerable<TItem> GetMatching<TItem>(this IEnumerable<TItem> items, Predicate<TItem> condition)
     {
-        foreach (var item in items)
-        {
-            if (condition(item))
-            {
-                yield return item;
-            }
-        }
+        return items.GetMatching(new AnonymousCriteria<TItem>(condition));
     }
 
     public static IEnumerable<TItem> GetMatching<TItem>(this IEnumerable<TItem> items, Criteria<TItem> criteria)
