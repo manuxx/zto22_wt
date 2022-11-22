@@ -35,7 +35,7 @@ static class EnumerableExtensions
     }
 }
 
-public interface Criteria<T>
+public interface Criteria<TItem>
 {
-    bool IsSatisfiedBy<TItem>(TItem item);
+    bool IsSatisfiedBy(TItem item);
 }
