@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using PetShop;
 using Training.DomainClasses;
 
 public static class EnumerableExtensions
@@ -14,15 +15,9 @@ public static class EnumerableExtensions
 
     public static IEnumerable<TItem> GetMatching<TItem>(this IList<TItem> items, Predicate<TItem> condition)
     {
-        foreach (var item in items)
-        {
-            if (condition(item))
-            {
-                yield return item;
-            }
-        }
+        return items.GetMatching<TItem>(new AnonymousCriteria<TItem>(condition));
     }
-    public static IEnumerable<TItem> GetMatchingItem<TItem>(this IList<TItem> items, Criteria<TItem> criteria)
+    public static IEnumerable<TItem> GetMatching<TItem>(this IList<TItem> items, ICriteria<TItem> criteria)
     {
         foreach (var item in items)
         {
@@ -32,9 +27,4 @@ public static class EnumerableExtensions
             }
         }
     }
-}
-
-public interface Criteria<TItem>
-{
-    bool IsSatisfiedBy(TItem item);
 }
