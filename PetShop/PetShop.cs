@@ -28,12 +28,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllCats()
         {
-            return _petsInTheStore.GetMatching(IsASpecie(Species.Cat));
-        }
-
-        private static Predicate<Pet> IsASpecie(Species species)
-        {
-            return pet => pet.species == species;
+            return _petsInTheStore.GetMatching(Pet.IsASpecie(Species.Cat));
         }
 
         public IEnumerable<Pet> AllPetsSortedByName()
@@ -45,17 +40,12 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllMice()
         {
-            return _petsInTheStore.GetMatching(IsASpecie(Species.Mouse));
+            return _petsInTheStore.GetMatching(Pet.IsASpecie(Species.Mouse));
         }
 
         public IEnumerable<Pet> AllFemalePets()
         {
-            return _petsInTheStore.GetMatching(IsFemale());
-        }
-
-        private static Predicate<Pet> IsFemale()
-        {
-            return pet => pet.sex == Sex.Female;
+            return _petsInTheStore.GetMatching(Pet.IsFemale());
         }
 
         public IEnumerable<Pet> AllCatsOrDogs()
@@ -65,22 +55,12 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsButNotMice()
         {
-            return _petsInTheStore.GetMatching(IsNotASpecie(Species.Mouse));
-        }
-
-        private static Predicate<Pet> IsNotASpecie(Species species)
-        {
-            return pet => pet.species != species;
+            return _petsInTheStore.GetMatching(Pet.IsNotASpecie(Species.Mouse));
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2010()
         {
-            return _petsInTheStore.GetMatching(IsBornAfter(2010));
-        }
-
-        private static Predicate<Pet> IsBornAfter(int i)
-        {
-            return pet => pet.yearOfBirth > i;
+            return _petsInTheStore.GetMatching(Pet.IsBornAfter(2010));
         }
 
         public IEnumerable<Pet> AllDogsBornAfter2010()
