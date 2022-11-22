@@ -69,14 +69,15 @@ namespace Training.DomainClasses
 
     public class BornAfterCriteria : Criteria<Pet>
     {
+        private int year;
         public BornAfterCriteria(int year)
         {
-            throw new NotImplementedException();
+            this.year = year;
         }
 
         public bool IsSatisfiedBy(Pet item)
         {
-            throw new NotImplementedException();
+            return item.yearOfBirth > year;
         }
     }
 }
