@@ -12,7 +12,7 @@ public static class EnumerableExtensions
         }
     }
 
-    public static IEnumerable<TItem> GetMatchingPets<TItem>(this IList<TItem> items, Func<TItem, bool> condition)
+    public static IEnumerable<TItem> GetMatching<TItem>(this IList<TItem> items, Predicate<TItem> condition)
     {
         foreach (var item in items)
         {
