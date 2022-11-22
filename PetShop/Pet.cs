@@ -66,4 +66,17 @@ namespace Training.DomainClasses
             return pet => pet.yearOfBirth > year;
         }
     }
+
+    public class BornAfterCriteria : Criteria<Pet>
+    {
+        public BornAfterCriteria(int year)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSatisfiedBy<TItem>(TItem item)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
