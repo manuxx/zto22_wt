@@ -17,7 +17,7 @@ static class EnumerableExtensions
         return items.GetMatching(new AnonymousCriteria<TItem>(condition));
     }
 
-    public static IEnumerable<TItem> GetMatching<TItem>(this IEnumerable<TItem> items, Criteria<TItem> criteria)
+    public static IEnumerable<TItem> GetMatching<TItem>(this IEnumerable<TItem> items, ICriteria<TItem> criteria)
     {
         foreach (var item in items)
         {
@@ -29,7 +29,21 @@ static class EnumerableExtensions
     }
 }
 
-public interface Criteria<TItem>
+public class AnonymousCriteria<T>: ICriteria<T>
+{
+    private Predicate<T> _condition;
+    public AnonymousCriteria(Predicate<T> condition)
+    {
+        _condition = condition;
+    }
+
+    public bool IsSatisfiedBy(T item)
+    {
+        return _condition(item);
+    }
+}
+
+public interface ICriteria<TItem>
 {
     bool IsSatisfiedBy(TItem item);
 }

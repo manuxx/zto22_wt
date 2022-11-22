@@ -61,13 +61,13 @@ namespace Training.DomainClasses
             return pet => pet.species != species;
         }
 
-        public static Criteria<Pet> IsBornAfter(int year)
+        public static ICriteria<Pet> IsBornAfter(int year)
         {
             return new BornAfterCriteria(year);
         }
     }
 
-    public class BornAfterCriteria : Criteria<Pet>
+    public class BornAfterCriteria : ICriteria<Pet>
     {
         private readonly int _year;
 
