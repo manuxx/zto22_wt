@@ -55,7 +55,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsButNotMice()
         {
-            return _petsInTheStore.GetMatchingPets(Pet.IsOfSpecies(Species.Mouse));
+            return _petsInTheStore.GetMatchingPets(Pet.IsNotOfSpecies(Species.Mouse));
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2010()
