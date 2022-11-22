@@ -74,7 +74,7 @@ namespace Training.DomainClasses
             throw new NotImplementedException();
         }
 
-        public bool IsSatisfiedBy<TItem>(TItem item)
+        public bool IsSatisfiedBy(Pet item)
         {
             throw new NotImplementedException();
         }
