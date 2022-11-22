@@ -11,16 +11,26 @@ static class EnumerableExtensions
             yield return item;
         }
     }
-    
-    public static IEnumerable<TItem> GetMatchingElements<TItem>(this IEnumerable<TItem> items, Predicate<TItem> predicate)
+
+    public static IEnumerable<TItem> GetMatching<TItem>(this IEnumerable<TItem> items, Predicate<TItem> condition)
     {
         foreach (var item in items)
         {
-            if (predicate(item))
+            if (condition(item))
             {
                 yield return item;
             }
         }
     }
-    
+
+    public static IEnumerable<TItem> GetMatching<TItem>(this IEnumerable<TItem> items, Criteria<TItem> criteria)
+    {
+        foreach (var item in items)
+        {
+            if (criteria.IsSatisfiedBy(item))
+            {
+                yield return item;
+            }
+        }
+    }
 }

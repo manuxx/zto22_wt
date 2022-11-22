@@ -25,30 +25,15 @@ namespace Training.DomainClasses
 
             _petsInTheStore.Add(newPet);
         }
-        
-        public Predicate<Pet> IsSpecies(Species species)
-        {
-            return pet => pet.species == species;
-        }
-        
-        public Predicate<Pet> IsNotASpecies(Species species)
-        {
-            return pet => pet.species != species;
-        }
-
-        public Predicate<Pet> IsMale()
-        {
-            return pet => pet.sex == Sex.Male;
-        }
-
-        public Predicate<Pet> IsFemale()
-        {
-            return pet => pet.sex == Sex.Female;
-        }
 
         public IEnumerable<Pet> AllCats()
         {
-            return _petsInTheStore.GetMatchingElements(IsSpecies(Species.Cat));
+            return _petsInTheStore.GetMatching(Pet.IsASpeciesOf(Species.Cat));
+        }
+
+        public IEnumerable<Pet> AllPetsBornAfter2010()
+        {
+            return _petsInTheStore.GetMatching(Pet.IsBornAfter(2010));
         }
 
         public IEnumerable<Pet> AllPetsSortedByName()
@@ -60,42 +45,38 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllMice()
         {
-            return _petsInTheStore.GetMatchingElements(IsSpecies(Species.Mouse));
+            return _petsInTheStore.GetMatching(Pet.IsASpeciesOf(Species.Mouse));
         }
 
         public IEnumerable<Pet> AllFemalePets()
         {
-            return _petsInTheStore.GetMatchingElements(IsFemale());
+            return _petsInTheStore.GetMatching(Pet.IsFemale());
         }
 
         public IEnumerable<Pet> AllCatsOrDogs()
         {
-            return _petsInTheStore.GetMatchingElements(pet => pet.species==Species.Cat || pet.species == Species.Dog);
+            return _petsInTheStore.GetMatching((pet => pet.species==Species.Cat || pet.species == Species.Dog));
         }
 
         public IEnumerable<Pet> AllPetsButNotMice()
         {
-            return _petsInTheStore.GetMatchingElements(pet => pet.species != Species.Mouse);
+            return _petsInTheStore.GetMatching(Pet.IsNotASpeciesOf(Species.Mouse));
         }
 
-        public IEnumerable<Pet> AllPetsBornAfter2010()
-        {
-            return _petsInTheStore.GetMatchingElements(pet => pet.yearOfBirth > 2010);
-        }
 
         public IEnumerable<Pet> AllDogsBornAfter2010()
         {
-            return _petsInTheStore.GetMatchingElements(pet => pet.species == Species.Dog && pet.yearOfBirth > 2010);
+            return _petsInTheStore.GetMatching((pet => pet.species == Species.Dog && pet.yearOfBirth > 2010));
         }
 
         public IEnumerable<Pet> AllMaleDogs()
         {
-            return _petsInTheStore.GetMatchingElements(pet => pet.sex == Sex.Male && pet.species == Species.Dog);
+            return _petsInTheStore.GetMatching((pet => pet.sex == Sex.Male && pet.species == Species.Dog));
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
-            return _petsInTheStore.GetMatchingElements(pet => pet.yearOfBirth > 2011 || pet.species == Species.Rabbit);
+            return _petsInTheStore.GetMatching((pet => pet.yearOfBirth > 2011 || pet.species == Species.Rabbit));
         }
     }
 }
