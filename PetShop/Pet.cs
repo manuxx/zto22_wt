@@ -1,4 +1,6 @@
 using System;
+using System.Runtime.CompilerServices;
+using Microsoft.VisualBasic;
 
 namespace Training.DomainClasses
 {
@@ -61,9 +63,23 @@ namespace Training.DomainClasses
             return pet => pet.species != species;
         }
 
-        public static Predicate<Pet> IsBornAfter(int i)
+        public static Criteria<Pet> IsBornAfter(int i)
         {
-            return pet => pet.yearOfBirth > i;
+            return new BornAfterCriteria(i);
+        }
+    }
+
+    public class BornAfterCriteria : Criteria<Pet>
+    {
+        private int Year;
+        public BornAfterCriteria(int i)
+        {
+            Year = i;
+        }
+
+        public bool IsSatisfiedBy(Pet item)
+        {
+            return item.yearOfBirth > Year;
         }
     }
 }
