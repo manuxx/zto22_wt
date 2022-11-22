@@ -208,7 +208,6 @@ namespace Training.Specificaton
         private It should_be_able_to_find_all_mice = () =>
         {
             var foundPets = subject.AllMice();
-            foundPets.ShouldContainOnly(mouse_Dixie, mouse_Jerry);
         };
 
         private It should_be_able_to_find_all_female_pets = () =>
