@@ -11,7 +11,7 @@ static class EnumerableExtensions
             yield return item;
         }
     }
-    public static IEnumerable<TItem> GetMatching<TItem>(this IEnumerable<TItem> items, Func<TItem, bool> condition)
+    public static IEnumerable<TItem> GetMatching<TItem>(this IEnumerable<TItem> items, Predicate<TItem> condition)
     {
         foreach (var item in items)
         {
