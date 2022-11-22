@@ -63,21 +63,14 @@ namespace Training.DomainClasses
             return _petsInTheStore.GetMatching(Pet.IsNotASpecies(Species.Mouse));
         }
 
-        public IEnumerable<Pet> AllPetsBornAfter2010()
-        {
-            return _petsInTheStore.GetMatching(Pet.IsBornAfter(2010));
-        }
-
         public IEnumerable<Pet> AllDogsBornAfter2010()
         {
             return _petsInTheStore.GetMatching(pet => pet.species == Species.Dog && pet.yearOfBirth > 2010);
-            return _petsInTheStore.GetMatching((pet => pet.species == Species.Dog && pet.yearOfBirth > 2010));
         }
 
         public IEnumerable<Pet> AllMaleDogs()
         {
             return _petsInTheStore.GetMatching(pet => pet.sex == Sex.Male && pet.species == Species.Dog);
-            return _petsInTheStore.GetMatching((pet => pet.sex == Sex.Male && pet.species == Species.Dog));
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
