@@ -28,7 +28,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllCats()
         {
-            return GetMatchingPets(pet => pet.species == Species.Cat);
+            return ListExtension.GetMatchingPets(pet => pet.species == Species.Cat, _petsInTheStore);
         }
 
         public IEnumerable<Pet> AllPetsSortedByName()
@@ -40,53 +40,42 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllMice()
         {
-            return GetMatchingPets(pet => pet.species == Species.Mouse);
+            return ListExtension.GetMatchingPets(pet => pet.species == Species.Mouse, _petsInTheStore);
         }
 
         public IEnumerable<Pet> AllFemalePets()
         {
-            return GetMatchingPets(pet => pet.sex == Sex.Female);
-        }
-
-        private IEnumerable<Pet> GetMatchingPets(Func<Pet, bool> condition)
-        {
-            foreach (var pet in _petsInTheStore)
-            {
-                if (condition(pet))
-                {
-                    yield return pet;
-                }
-            }
+            return ListExtension.GetMatchingPets(pet => pet.sex == Sex.Female, _petsInTheStore);
         }
 
         public IEnumerable<Pet> AllCatsOrDogs()
         {
-            return GetMatchingPets(pet => pet.species==Species.Cat || pet.species == Species.Dog);
+            return ListExtension.GetMatchingPets(pet => pet.species==Species.Cat || pet.species == Species.Dog, _petsInTheStore);
         }
 
         public IEnumerable<Pet> AllPetsButNotMice()
         {
-            return GetMatchingPets(pet => pet.species != Species.Mouse);
+            return ListExtension.GetMatchingPets(pet => pet.species != Species.Mouse, _petsInTheStore);
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2010()
         {
-            return GetMatchingPets(pet => pet.yearOfBirth > 2010);
+            return ListExtension.GetMatchingPets(pet => pet.yearOfBirth > 2010, _petsInTheStore);
         }
 
         public IEnumerable<Pet> AllDogsBornAfter2010()
         {
-            return GetMatchingPets(pet => pet.species == Species.Dog && pet.yearOfBirth > 2010);
+            return ListExtension.GetMatchingPets(pet => pet.species == Species.Dog && pet.yearOfBirth > 2010, _petsInTheStore);
         }
 
         public IEnumerable<Pet> AllMaleDogs()
         {
-            return GetMatchingPets(pet => pet.sex == Sex.Male && pet.species == Species.Dog);
+            return ListExtension.GetMatchingPets(pet => pet.sex == Sex.Male && pet.species == Species.Dog, _petsInTheStore);
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
-            return GetMatchingPets(pet => pet.yearOfBirth > 2011 || pet.species == Species.Rabbit);
+            return ListExtension.GetMatchingPets(pet => pet.yearOfBirth > 2011 || pet.species == Species.Rabbit, _petsInTheStore);
         }
     }
 }
