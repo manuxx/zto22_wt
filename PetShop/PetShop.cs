@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using Training.DomainClasses;
@@ -21,13 +22,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllCats()
         {
-            foreach (var pet in _petsInTheStore)
-            {
-                if (pet.species == Species.Cat)
-                {
-                    yield return pet;
-                }
-            }
+            return _petsInTheStore.GetMatchingElements(Pet.IsASpeciesOf(Species.Cat));
         }
 
         public void Add(Pet newPet)
@@ -47,59 +42,42 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
-            return GetMatchingPets(p => p.yearOfBirth > 2011 || p.species == Species.Rabbit);
+            return _petsInTheStore.GetMatchingElements(p => p.yearOfBirth > 2011 || p.species == Species.Rabbit);
         }
 
         public IEnumerable<Pet> AllMaleDogs()
         {
-            return GetMatchingPets(p => p.species == Species.Dog && p.sex == Sex.Male);
+            return _petsInTheStore.GetMatchingElements(p => p.species == Species.Dog && p.sex == Sex.Male);
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2010()
         {
-            return GetMatchingPets(p => p.yearOfBirth > 2010);
+            return _petsInTheStore.GetMatchingElements(Pet.IsBornAfter(2010));
         }
 
         public IEnumerable<Pet> AllPetsButNotMice()
         {
-            return GetMatchingPets(p => p.species != Species.Mouse);
+            return _petsInTheStore.GetMatchingElements(Pet.IsNotASpeciesOf(Species.Mouse));
         }
 
         public IEnumerable<Pet> AllCatsOrDogs()
         {
-            return GetMatchingPets(p => p.species == Species.Cat || p.species == Species.Dog);
+            return _petsInTheStore.GetMatchingElements(p => p.species == Species.Cat || p.species == Species.Dog);
         }
 
         public IEnumerable<Pet> AllDogsBornAfter2010()
         {
-            return GetMatchingPets(p => p.species == Species.Dog && p.yearOfBirth > 2010);
+            return _petsInTheStore.GetMatchingElements(p => p.species == Species.Dog && p.yearOfBirth > 2010);
         }
 
         public IEnumerable<Pet> AllFemalePets()
         {
-            return GetMatchingPets(p => p.sex == Sex.Female);
-        }
-
-        private IEnumerable<Pet> GetMatchingPets(Func<Pet, bool> condition)
-        {
-            foreach (var pet in _petsInTheStore)
-            {
-                if (condition(pet))
-                {
-                    yield return pet;
-                }
-            }
+            return _petsInTheStore.GetMatchingElements(Pet.HasSex(Sex.Female));
         }
 
         public IEnumerable<Pet> AllMice()
         {
-            foreach (var pet in _petsInTheStore)
-            {
-                if (pet.species == Species.Mouse)
-                {
-                    yield return pet;
-                }
-            }
+            return _petsInTheStore.GetMatchingElements(Pet.IsASpeciesOf(Species.Mouse));
         }
     }
 }
