@@ -12,7 +12,7 @@ static class EnumerableExtensions
         }
     }
 
-    public static IEnumerable<TElement> GetMatchingPets<TElement>(this IList<TElement> pets, Func<TElement, bool> condition)
+    public static IEnumerable<TElement> GetMatchingPets<TElement>(this IList<TElement> pets, Predicate<TElement> condition)
     {
         foreach (var pet in pets)
         {
