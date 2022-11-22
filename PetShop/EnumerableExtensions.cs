@@ -12,11 +12,11 @@ static class EnumerableExtensions
         }
     }
     
-    public static IEnumerable<TItem> GetMatchingElements<TItem>(this IEnumerable<TItem> items, Func<TItem, bool> condition)
+    public static IEnumerable<TItem> GetMatchingElements<TItem>(this IEnumerable<TItem> items, Predicate<TItem> predicate)
     {
         foreach (var item in items)
         {
-            if (condition(item))
+            if (predicate(item))
             {
                 yield return item;
             }

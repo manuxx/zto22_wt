@@ -25,10 +25,30 @@ namespace Training.DomainClasses
 
             _petsInTheStore.Add(newPet);
         }
+        
+        public Predicate<Pet> IsSpecies(Species species)
+        {
+            return pet => pet.species == species;
+        }
+        
+        public Predicate<Pet> IsNotASpecies(Species species)
+        {
+            return pet => pet.species != species;
+        }
+
+        public Predicate<Pet> IsMale()
+        {
+            return pet => pet.sex == Sex.Male;
+        }
+
+        public Predicate<Pet> IsFemale()
+        {
+            return pet => pet.sex == Sex.Female;
+        }
 
         public IEnumerable<Pet> AllCats()
         {
-            return _petsInTheStore.GetMatchingElements(pet => pet.species == Species.Cat);
+            return _petsInTheStore.GetMatchingElements(IsSpecies(Species.Cat));
         }
 
         public IEnumerable<Pet> AllPetsSortedByName()
@@ -40,12 +60,12 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllMice()
         {
-            return _petsInTheStore.GetMatchingElements(pet => pet.species == Species.Mouse);
+            return _petsInTheStore.GetMatchingElements(IsSpecies(Species.Mouse));
         }
 
         public IEnumerable<Pet> AllFemalePets()
         {
-            return _petsInTheStore.GetMatchingElements(pet => pet.sex == Sex.Female);
+            return _petsInTheStore.GetMatchingElements(IsFemale());
         }
 
         public IEnumerable<Pet> AllCatsOrDogs()
