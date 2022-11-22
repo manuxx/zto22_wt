@@ -22,4 +22,19 @@ public static class EnumerableExtensions
             }
         }
     }
+    public static IEnumerable<TItem> GetMatchingItem<TItem>(this IList<TItem> items, Criteria<TItem> criteria)
+    {
+        foreach (var item in items)
+        {
+            if (criteria.IsSatisfiedBy(item))
+            {
+                yield return item;
+            }
+        }
+    }
+}
+
+public interface Criteria<T>
+{
+    bool IsSatisfiedBy<TItem>(TItem item);
 }
