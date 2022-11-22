@@ -12,9 +12,9 @@ static class EnumerableExtensions
         }
     }
 
-    public static IEnumerable<Pet> GetMatchingPets(this IList<Pet> petsInTheStore, Func<Pet, bool> condition)
+    public static IEnumerable<TElement> GetMatchingPets<TElement>(this IList<TElement> pets, Func<TElement, bool> condition)
     {
-        foreach (var pet in petsInTheStore)
+        foreach (var pet in pets)
         {
             if (condition(pet))
             {
