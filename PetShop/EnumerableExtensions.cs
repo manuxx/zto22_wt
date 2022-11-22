@@ -35,6 +35,14 @@ static class EnumerableExtensions
     }
 }
 
+internal class AnonymousCriteria<T> : Criteria<T>
+{
+    bool Criteria<T>.IsSatisfiedBy(T item)
+    {
+        return true; 
+    }
+}
+
 public interface Criteria<TItem>
 {
     bool IsSatisfiedBy(TItem item);
