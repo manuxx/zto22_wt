@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
 using Training.DomainClasses;
 
 static class EnumerableExtensions
@@ -13,16 +15,10 @@ static class EnumerableExtensions
     }
     public static IEnumerable<TItem> GetMatching<TItem>(this IEnumerable<TItem> items, Predicate<TItem> condition)
     {
-        foreach (var item in items)
-        {
-            if (condition(item))
-            {
-                yield return item;
-            }
-        }
+        return items.GetMatching(new AnonymousCriteria<TItem>(condition));
     }
 
-    public static IEnumerable<TItem> GetMatching<TItem>(this IEnumerable<TItem> items, Criteria<TItem> criteria)
+    public static IEnumerable<TItem> GetMatching<TItem>(this IEnumerable<TItem> items, ICriteria<TItem> criteria)
     {
         foreach (var item in items)
         {
@@ -32,9 +28,4 @@ static class EnumerableExtensions
             }
         }
     }
-}
-
-public interface Criteria<TItem>
-{
-    bool IsSatisfiedBy(TItem item);
 }

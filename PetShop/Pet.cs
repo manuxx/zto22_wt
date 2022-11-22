@@ -63,23 +63,9 @@ namespace Training.DomainClasses
             return pet => pet.species != species;
         }
 
-        public static Criteria<Pet> IsBornAfter(int i)
+        public static ICriteria<Pet> IsBornAfter(int i)
         {
             return new BornAfterCriteria(i);
-        }
-    }
-
-    public class BornAfterCriteria : Criteria<Pet>
-    {
-        private int Year;
-        public BornAfterCriteria(int i)
-        {
-            Year = i;
-        }
-
-        public bool IsSatisfiedBy(Pet item)
-        {
-            return item.yearOfBirth > Year;
         }
     }
 }
