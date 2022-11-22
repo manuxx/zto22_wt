@@ -12,14 +12,19 @@ static class EnumerableExtensions
         }
     }
 
-    public static IEnumerable<TItem> GetMatching<TItem>(this IEnumerable<TItem> items, Predicate<TItem> condition)
+    public static IEnumerable<TItem> GetMatching<TItem>(this IEnumerable<TItem> items, ICriteria<TItem> criteria)
     {
         foreach (var item in items)
         {
-            if (condition(item))
+            if (criteria.IsSatisfiedBy(item))
             {
                 yield return item;
             }
         }
+    }
+
+    public static IEnumerable<TItem> GetMatching<TItem>(this IEnumerable<TItem> items, Predicate<TItem> predicate)
+    {
+        return items.GetMatching(new AnonymousCriteria<TItem>(predicate));
     }
 }
