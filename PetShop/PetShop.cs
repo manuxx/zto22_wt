@@ -55,7 +55,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllCatsOrDogs()
         {
-            return _petsInTheStore.GetMatching(new Alternative<Pet>(Pet.IsASpeciesOf(Species.Cat), Pet.IsASpeciesOf(Species.Dog)));
+            return _petsInTheStore.GetMatching((pet => pet.species==Species.Cat || pet.species == Species.Dog));
         }
 
         public IEnumerable<Pet> AllPetsButNotMice()
@@ -66,7 +66,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllDogsBornAfter2010()
         {
-            return _petsInTheStore.GetMatching(new Conjunction<Pet>(Pet.IsASpeciesOf(Species.Dog), Pet.IsBornAfter(2010)));
+            return _petsInTheStore.GetMatching((pet => pet.species == Species.Dog && pet.yearOfBirth > 2010));
         }
 
         public IEnumerable<Pet> AllMaleDogs()
@@ -79,40 +79,4 @@ namespace Training.DomainClasses
             return _petsInTheStore.GetMatching(new Alternative<Pet>(Pet.IsBornAfter(2011), Pet.IsASpeciesOf(Species.Rabbit)));
         }
     }
-
-    public class Alternative<TItem> : ICriteria<TItem>
-    {
-        private readonly ICriteria<TItem> _criteria1;
-        private readonly ICriteria<TItem> _criteria2;
-
-        public Alternative(ICriteria<TItem> criteria1, ICriteria<TItem> criteria2)
-        {
-            _criteria1 = criteria1;
-            _criteria2 = criteria2;
-        }
-
-        public bool IsSatisfiedBy(TItem item)
-        {
-            return _criteria1.IsSatisfiedBy(item) || _criteria2.IsSatisfiedBy(item);
-        }
-    }
-
-    public class Conjunction<TItem> : ICriteria<TItem>
-    {
-        private readonly ICriteria<TItem> _criteria1;
-        private readonly ICriteria<TItem> _criteria2;
-
-        public Conjunction(ICriteria<TItem> criteria1, ICriteria<TItem> criteria2)
-        {
-            _criteria1 = criteria1;
-            _criteria2 = criteria2;
-        }
-
-        public bool IsSatisfiedBy(TItem item)
-        {
-            return _criteria1.IsSatisfiedBy(item) &&
-                   _criteria2.IsSatisfiedBy(item);
-        }
-    }
-
 }
