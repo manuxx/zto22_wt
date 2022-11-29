@@ -46,13 +46,6 @@ namespace Training.DomainClasses
         public float price { get; set; }
         public Species species { get; set; }
 
-        
-        
-
-        public static Predicate<Pet> IsNotASpeciesOf(Species species)
-        {
-            return pet => pet.species != species;
-        }
 
         public static ICriteria<Pet> IsASpeciesOf(Species species)
         {
@@ -67,6 +60,10 @@ namespace Training.DomainClasses
         public static ICriteria<Pet> IsFemale()
         {
             return new SexCriteria(Sex.Female);
+        }
+        public static ICriteria<Pet> IsMale()
+        {
+            return new SexCriteria(Sex.Male);
         }
 
         public class SpeciesCriteria : ICriteria<Pet>
@@ -112,7 +109,6 @@ namespace Training.DomainClasses
                 return item.yearOfBirth > _year;
             }
         }
+        
     }
-
-   
 }
