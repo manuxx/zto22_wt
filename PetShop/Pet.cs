@@ -54,11 +54,15 @@ namespace Training.DomainClasses
         public static ICriteria<Pet> IsFemale()
         {
             return new SexCriteria(Sex.Female);
+        }   
+        public static ICriteria<Pet> IsMale()
+        {
+            return new SexCriteria(Sex.Male);
         }
 
-        public static Predicate<Pet> IsNotASpeciesOf(Species species)
+        public static ICriteria<Pet> IsNotASpeciesOf(Species species)
         {
-            return pet => pet.species != species;
+            return new Negation<Pet>(IsASpeciesOf(species));
         }
 
         public static ICriteria<Pet> IsBornAfter(int year)
@@ -121,4 +125,42 @@ namespace Training.DomainClasses
 
 
 
+    public class Conjunction<TItem> : ICriteria<TItem>
+    {
+
+
+
+
+        private readonly ICriteria<TItem> _criteria1;
+        private readonly ICriteria<TItem> _criteria2;
+
+        public Conjunction(ICriteria<TItem> criteria1, ICriteria<TItem> criteria2)
+        {
+            _criteria1 = criteria1;
+            _criteria2 = criteria2;
+        }
+
+
+        public bool IsSatisfiedBy(TItem item)
+        {
+            return IsSatisfiedBy(item) && IsSatisfiedBy(item);
+        }
+    }
+
+    public class Negation<TItem> : ICriteria<TItem>
+    {
+
+        private readonly ICriteria<TItem> _criteriaToNegate;
+
+        public Negation(ICriteria<TItem> criteriaToNegate)
+        {
+            _criteriaToNegate = criteriaToNegate;
+        }
+
+
+        public bool IsSatisfiedBy(TItem item)
+        {
+            return !_criteriaToNegate.IsSatisfiedBy(item);
+        }
+    }
 }
