@@ -71,35 +71,44 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllMaleDogs()
         {
-            return _petsInTheStore.GetMatching(new Conjunction(Pet.IsASpeciesOf(Species.Dog),Pet.IsMale() ));
+            return _petsInTheStore.GetMatching(new Conjunction<Pet>(Pet.IsASpeciesOf(Species.Dog),Pet.IsMale() ));
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
-            return _petsInTheStore.GetMatching(new Alternative(Pet.IsBornAfter(2011), Pet.IsASpeciesOf(Species.Rabbit)));
+            return _petsInTheStore.GetMatching(new Alternative<Pet>(Pet.IsBornAfter(2011), Pet.IsASpeciesOf(Species.Rabbit)));
         }
     }
 
-    public class Alternative : ICriteria<Pet>
+    public class Alternative<TItem> : ICriteria<TItem>
     {
-        public Alternative(ICriteria<Pet> isBornAfter, ICriteria<Pet> isASpeciesOf)
-        {
-            throw new NotImplementedException();
-        }
-    }
+        private readonly ICriteria<TItem> _criteria1;
+        private readonly ICriteria<TItem> _criteria2;
 
-    public class Conjunction : ICriteria<Pet>
-    {
-        private readonly ICriteria<Pet> _criteria1;
-        private readonly ICriteria<Pet> _criteria2;
-
-        public Conjunction(ICriteria<Pet> criteria1, ICriteria<Pet> criteria2)
+        public Alternative(ICriteria<TItem> criteria1, ICriteria<TItem> criteria2)
         {
             _criteria1 = criteria1;
             _criteria2 = criteria2;
         }
 
-        public bool IsSatisfiedBy(Pet item)
+        public bool IsSatisfiedBy(TItem item)
+        {
+            return _criteria1.IsSatisfiedBy(item) || _criteria2.IsSatisfiedBy(item);
+        }
+    }
+
+    public class Conjunction<TItem> : ICriteria<TItem>
+    {
+        private readonly ICriteria<TItem> _criteria1;
+        private readonly ICriteria<TItem> _criteria2;
+
+        public Conjunction(ICriteria<TItem> criteria1, ICriteria<TItem> criteria2)
+        {
+            _criteria1 = criteria1;
+            _criteria2 = criteria2;
+        }
+
+        public bool IsSatisfiedBy(TItem item)
         {
             return _criteria1.IsSatisfiedBy(item) &&
                    _criteria2.IsSatisfiedBy(item);
