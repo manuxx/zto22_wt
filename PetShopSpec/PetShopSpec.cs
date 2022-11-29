@@ -201,10 +201,10 @@ namespace Training.Specificaton
     {
         private It should_be_able_to_find_all_cats = () =>
         {
-            var foundPets = subject.AllCats();
+            ICriteria<Pet> criteria = Where<Pet>(pet => pet.species).IsEqualTo(Species.Cat);
+            var foundPets = subject.AllPets().GetMatching(criteria);
             foundPets.ShouldContainOnly(cat_Tom, cat_Jinx);
         };
-
         private It should_be_able_to_find_all_mice = () =>
         {
             var foundPets = subject.AllMice();
