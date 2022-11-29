@@ -46,24 +46,60 @@ namespace Training.DomainClasses
         public float price { get; set; }
         public Species species { get; set; }
 
-        public static Predicate<Pet> IsASpeciesOf(Species species)
+        public static ICriteria<Pet> IsASpeciesOf(Species species)
         {
-            return pet => pet.species == species;
-        }
-
-        public static Predicate<Pet> IsFemale()
-        {
-            return pet => pet.sex == Sex.Female;
-        }
-
-        public static Predicate<Pet> IsNotASpeciesOf(Species species)
-        {
-            return pet => pet.species != species;
+            return new SpeciesCriteria(species);
         }
 
         public static ICriteria<Pet> IsBornAfter(int year)
         {
             return new BornAfterCriteria(year);
+        }
+    }
+
+    public class Negation<TItem> : ICriteria<TItem>
+    {
+        private readonly ICriteria<TItem> _criteria;
+
+        public Negation(ICriteria<TItem> criteria)
+        {
+            _criteria = criteria;
+        }
+
+        public bool IsSatisfiedBy(TItem item)
+        {
+            return !_criteria.IsSatisfiedBy(item);
+        }
+    }
+
+
+    public class SpeciesCriteria : ICriteria<Pet>
+    {
+        private readonly Species _species;
+
+        public SpeciesCriteria(Species species)
+        {
+
+            _species = species;
+        }
+
+        public bool IsSatisfiedBy(Pet pet)
+        {
+            return pet.species == _species;
+        }
+    }
+
+    public class SexCriteria : ICriteria<Pet>
+    {
+        private readonly Sex _sex;
+        public SexCriteria(Sex sex)
+        {
+            _sex = sex;
+        }
+
+        public bool IsSatisfiedBy(Pet pet)
+        {
+            return pet.sex == _sex;
         }
     }
 
@@ -76,9 +112,9 @@ namespace Training.DomainClasses
             _year = year;
         }
 
-        public bool IsSatisfiedBy(Pet item)
+        public bool IsSatisfiedBy(Pet pet)
         {
-            return item.yearOfBirth > _year;
+            return pet.yearOfBirth > _year;
         }
     }
 }
