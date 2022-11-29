@@ -201,9 +201,18 @@ namespace Training.Specificaton
     {
         private It should_be_able_to_find_all_cats = () =>
         {
+            ICriteria<Pet> criteria = 
+                Where(pet => pet.species)
+                .IsEqualTo(Species.Cat);
+
             var foundPets = subject.AllCats();
             foundPets.ShouldContainOnly(cat_Tom, cat_Jinx);
         };
+
+        private static ICollection<Pet> Where(ICollection<Pet> pet)
+        {
+            
+        }
 
         private It should_be_able_to_find_all_mice = () =>
         {

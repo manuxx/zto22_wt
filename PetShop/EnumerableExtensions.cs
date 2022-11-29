@@ -4,11 +4,15 @@ using System.Diagnostics;
 using PetShop;
 using Training.DomainClasses;
 
+<<<<<<< Updated upstream
 namespace Training.DomainClasses
 {
 }
 
 static class EnumerableExtensions
+=======
+public static class EnumerableExtensions
+>>>>>>> Stashed changes
 {
     public static IEnumerable<TItem> OneAtATime<TItem>(this IEnumerable<TItem> items)
     {
@@ -16,11 +20,6 @@ static class EnumerableExtensions
         {
             yield return item;
         }
-    }
-
-    public static IEnumerable<TItem> GetMatching<TItem>(this IEnumerable<TItem> items, Predicate<TItem> condition)
-    {
-        return items.GetMatching(new AnonymousCriteria<TItem>(condition));
     }
 
     public static IEnumerable<TItem> GetMatching<TItem>(this IEnumerable<TItem> items, ICriteria<TItem> criteria)

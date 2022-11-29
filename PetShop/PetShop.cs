@@ -67,8 +67,12 @@ namespace Training.DomainClasses
         public IEnumerable<Pet> AllDogsBornAfter2010()
         {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             return _petsInTheStore.GetMatching(
                 new Conjuction<Pet>(Pet.IsASpeciesOf(Species.Dog), Pet.IsBornAfter(2010)));
+=======
+            return _petsInTheStore.GetMatching(Pet.IsASpeciesOf(Species.Dog).And(Pet.IsBornAfter(2010)));
+>>>>>>> Stashed changes
 =======
             return _petsInTheStore.GetMatching(Pet.IsASpeciesOf(Species.Dog).And(Pet.IsBornAfter(2010)));
 >>>>>>> Stashed changes
