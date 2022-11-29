@@ -60,7 +60,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsButNotMice()
         {
-            return _petsInTheStore.GetMatching(new Negation<Pet>(Pet.IsASpeciesOf(Species.Mouse)));
+            return _petsInTheStore.GetMatching(Pet.IsASpeciesOf(Species.Mouse).Not());
         }
 
 

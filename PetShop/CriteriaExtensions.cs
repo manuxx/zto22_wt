@@ -11,4 +11,9 @@ public static class CriteriaExtensions
     {
         return new Alternative<TItem>(leftCriteria, rightCriteria);
     }
+    
+    public static Negation<TItem> Not<TItem>(this ICriteria<TItem> criteria)
+    {
+        return new Negation<TItem>(criteria);
+    }
 }
