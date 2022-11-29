@@ -55,7 +55,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllCatsOrDogs()
         {
-            return _petsInTheStore.GetMatching(Pet.IsASpeciesOf(Species.Cat).Or(Pet.IsASpeciesOf(Species.Cat)));
+            return _petsInTheStore.GetMatching(Pet.IsASpeciesOf(Species.Cat).Or(Pet.IsASpeciesOf(Species.Dog)));
         }
 
         public IEnumerable<Pet> AllPetsButNotMice()
