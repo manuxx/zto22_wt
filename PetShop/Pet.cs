@@ -56,9 +56,9 @@ namespace Training.DomainClasses
             return new SexCriteria(Sex.Female);
         }
 
-        public static Predicate<Pet> IsNotASpeciesOf(Species species)
+        public static ICriteria<Pet> IsNotASpeciesOf(Species species)
         {
-            return pet => pet.species != species;
+            return new Negation(IsASpeciesOf(species));
         }
 
         public static ICriteria<Pet> IsBornAfter(int year)
@@ -111,5 +111,16 @@ namespace Training.DomainClasses
         }
     }
 
-    
+    public class Negation : ICriteria<Pet>
+    {
+        public Negation(ICriteria<Pet> isASpeciesOf)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSatisfiedBy(Pet item)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
