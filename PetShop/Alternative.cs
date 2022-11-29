@@ -1,6 +1,6 @@
 namespace Training.DomainClasses
 {
-    public class Alternative<TItem> : ICriteria<TItem>
+    public class Alternative<TItem> : BinaryCriteria<TItem>
     {
         private readonly ICriteria<TItem> _criteria1;
         private readonly ICriteria<TItem> _criteria2;
@@ -11,7 +11,7 @@ namespace Training.DomainClasses
             _criteria2 = criteria2;
         }
 
-        public bool IsSatisfiedBy(TItem item)
+        public override bool IsSatisfiedBy(TItem item)
         {
             return _criteria1.IsSatisfiedBy(item) || _criteria2.IsSatisfiedBy(item);
         }

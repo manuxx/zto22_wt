@@ -2,7 +2,7 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace Training.DomainClasses
 {
-    public class Conjunction<TItem> : ICriteria<TItem>
+    public class Conjunction<TItem> : BinaryCriteria<TItem>
     {
         private readonly ICriteria<TItem> _criteria1;
         private readonly ICriteria<TItem> _criteria2;
