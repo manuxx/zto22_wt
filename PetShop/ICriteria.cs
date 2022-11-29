@@ -5,7 +5,7 @@ public interface ICriteria<TItem>
     bool IsSatisfiedBy(TItem item);
 }
 
-static class ICriteriaExtensions
+static class CriteriaExtensions
 {
     public static ICriteria<T> And<T>(this ICriteria<T> criteria1, ICriteria<T> criteria2)
     {
