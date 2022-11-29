@@ -60,7 +60,8 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsButNotMice()
         {
-            return _petsInTheStore.GetMatching(Pet.IsNotASpeciesOf(Species.Mouse));
+            return _petsInTheStore.GetMatching(Pet.IsNotASpeciesOf(new Negation<Pet>(IsSpeciesOf(Species.Mouse))));
+            // dekorator- rozszerza i zmieniadzialanie (jeszcze jest adapter)
         }
 
 
@@ -77,6 +78,20 @@ namespace Training.DomainClasses
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
             return _petsInTheStore.GetMatching((pet => pet.yearOfBirth > 2011 || pet.species == Species.Rabbit));
+        }
+    }
+
+    public class Negation : ICriteria<Pet>
+    {
+        private readonly ICriteria<Pet> _isSpeciesOf;
+        public Negation(ICriteria<Pet> isSpeciesOf)
+        {
+            _isSpeciesOf = isSpeciesOf;
+        }
+
+        public bool IsSatisfiedBy(Pet item)
+        {
+            return !_isSpeciesOf.IsSatisfiedBy(item);
         }
     }
 }
