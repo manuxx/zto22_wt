@@ -71,12 +71,25 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllMaleDogs()
         {
-            return _petsInTheStore.GetMatching(new Conjunction<Pet>(Pet.IsASpeciesOf(Species.Dog),Pet.IsMale() ));
+            return _petsInTheStore.GetMatching(Pet.IsASpeciesOf(Species.Dog).And(Pet.IsMale()));
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
-            return _petsInTheStore.GetMatching(new Alternative<Pet>(Pet.IsBornAfter(2011), Pet.IsASpeciesOf(Species.Rabbit)));
+            return _petsInTheStore.GetMatching(Pet.IsBornAfter(2011).Or(Pet.IsASpeciesOf(Species.Rabbit)));
+        }
+    }
+
+    public static class CriteriaExtension
+    {
+        public static BinaryCriteria<TItem> And<TItem>(this ICriteria<TItem> criteria1, ICriteria<TItem> criteria2)
+        {
+            return new Conjunction<TItem>(criteria1, criteria2);
+        }
+        public static BinaryCriteria<TItem> Or<TItem>(this ICriteria<TItem> criteria1, ICriteria<TItem> criteria2)
+        {
+            return new Alternative<TItem>(criteria1, criteria2);
         }
     }
 }
+
