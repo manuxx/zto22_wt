@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using Training.DomainClasses;
 
 internal class AnonymousCriteria<TItem> : ICriteria<TItem>
 {

@@ -60,6 +60,7 @@ namespace Training.DomainClasses
         {
             return new BornAfterCriteria(year);
         }
+
         public class SpeciesCriteria : ICriteria<Pet>
         {
             private readonly Species _species;
