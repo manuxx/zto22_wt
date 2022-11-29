@@ -92,5 +92,18 @@ namespace Training.DomainClasses
             throw new NotImplementedException();
         }
     }
-        
+
+    public class Disjunction : ICriteria<Pet>
+    {
+        public Disjunction(ICriteria<Pet> isASpeciesOf, ICriteria<Pet> isBornAfter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSatisfiedBy(Pet item)
+        {
+            return 
+        }
+    }
+
 }
