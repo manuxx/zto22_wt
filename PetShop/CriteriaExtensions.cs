@@ -1,15 +1,14 @@
-namespace Training.DomainClasses
+using Training.DomainClasses;
+
+public static class CriteriaExtensions
 {
-    static class CriteriaExtensions
+    public static BinaryCriteria<TItem> And<TItem>(this ICriteria<TItem> leftCriteria, ICriteria<TItem> rightCriteria)
     {
-        public static ICriteria<TItem> And<TItem>(this ICriteria<TItem> criteria, ICriteria<TItem> other)
-        {
-            return new Conjunction<TItem>(criteria, other);
-        }
-        
-        public static ICriteria<TItem> Or<TItem>(this ICriteria<TItem> criteria, ICriteria<TItem> other)
-        {
-            return new Alternative<TItem>(criteria, other);
-        }
+        return new Conjunction<TItem>(leftCriteria,rightCriteria );
+    }
+
+    public static Alternative<TItem> Or<TItem>(this ICriteria<TItem> leftCriteria, ICriteria<TItem> rightCriteria)
+    {
+        return new Alternative<TItem>(leftCriteria, rightCriteria);
     }
 }

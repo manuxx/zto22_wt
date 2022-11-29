@@ -1,11 +1,16 @@
 namespace Training.DomainClasses
 {
-    public class BinaryCriteria<TItem> : ICriteria<TItem>
+    public abstract class BinaryCriteria<TItem> : ICriteria<TItem>
     {
+        protected ICriteria<TItem> _criteria1;
+        protected ICriteria<TItem> _criteria2;
 
-        public bool IsSatisfiedBy(TItem item)
+        public BinaryCriteria(ICriteria<TItem> criteria1, ICriteria<TItem> criteria2)
         {
-            return false;
+            _criteria1 = criteria1;
+            _criteria2 = criteria2;
         }
+
+        public abstract bool IsSatisfiedBy(TItem item);
     }
 }
