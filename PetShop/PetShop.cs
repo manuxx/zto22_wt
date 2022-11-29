@@ -79,4 +79,18 @@ namespace Training.DomainClasses
             return _petsInTheStore.GetMatching((pet => pet.yearOfBirth > 2011 || pet.species == Species.Rabbit));
         }
     }
+
+    public class Conjunction : ICriteria<Pet>
+    {
+        public Conjunction(ICriteria<Pet> isASpeciesOf, ICriteria<Pet> isMale)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSatisfiedBy(Pet item)
+        {
+            throw new NotImplementedException();
+        }
+    }
+        
 }
