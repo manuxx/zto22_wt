@@ -58,7 +58,7 @@ namespace Training.DomainClasses
 
         public static ICriteria<Pet> IsNotASpeciesOf(Species species)
         {
-            return new Negation(IsASpeciesOf(species));
+            return new Negation<Pet>(IsASpeciesOf(species));
         }
 
         public static ICriteria<Pet> IsBornAfter(int year)
@@ -111,16 +111,18 @@ namespace Training.DomainClasses
         }
     }
 
-    public class Negation : ICriteria<Pet>
+    public class Negation<TItem> : ICriteria<TItem>
     {
-        public Negation(ICriteria<Pet> isASpeciesOf)
+        private readonly ICriteria<TItem> _criteriaToNegate;
+
+        public Negation(ICriteria<TItem> criteriaToNegate)
         {
-            throw new NotImplementedException();
+            _criteriaToNegate = criteriaToNegate;
         }
 
-        public bool IsSatisfiedBy(Pet item)
+        public bool IsSatisfiedBy(TItem item)
         {
-            throw new NotImplementedException();
+            return ! _criteriaToNegate.IsSatisfiedBy(item);
         }
     }
 }
