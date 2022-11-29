@@ -46,9 +46,9 @@ namespace Training.DomainClasses
         public float price { get; set; }
         public Species species { get; set; }
 
-        public static Predicate<Pet> IsASpeciesOf(Species species)
+        public static ICriteria<Pet> IsASpeciesOf(Species species)
         {
-            return pet => pet.species == species;
+            return new SpeciesCriteria(species);
         }
 
         public static Predicate<Pet> IsFemale()
@@ -56,14 +56,19 @@ namespace Training.DomainClasses
             return pet => pet.sex == Sex.Female;
         }
 
-        public static Predicate<Pet> IsNotASpeciesOf(Species species)
-        {
-            return pet => pet.species != species;
-        }
+        // public static ICriteria<Pet> IsNotASpeciesOf(Species species)
+        // {
+        //     return new Negation<Pet>(IsASpeciesOf(species));
+        // }
 
         public static ICriteria<Pet> IsBornAfter(int year)
         {
             return new BornAfterCriteria(year);
+        }
+
+        public static ICriteria<Pet> IsASexOf(Sex sex)
+        {
+            return new SexCriteria(sex);
         }
     }
 
@@ -84,31 +89,46 @@ namespace Training.DomainClasses
 
     public class SpeciesCriteria : ICriteria<Pet>
     {
-        private readonly Species species;
+        private readonly Species _species;
 
         public SpeciesCriteria(Species species)
         {
-            this.species = species;
+            this._species = species;
         }
 
         public bool IsSatisfiedBy(Pet item)
         {
-            return item.species.Equals(species);
+            return item.species.Equals(_species);
         }
     }
 
     public class SexCriteria : ICriteria<Pet>
     {
-        private readonly Sex sex;
+        private readonly Sex _sex;
 
         public SexCriteria(Sex sex)
         {
-            this.sex = sex;
+            this._sex = sex;
         }
 
         public bool IsSatisfiedBy(Pet item)
         {
-            return item.sex.Equals(sex);
+            return item.sex.Equals(_sex);
+        }
+    }
+
+    public class Negation<T> : ICriteria<T>
+    {
+        private readonly ICriteria<T> _criteria;
+
+        public Negation(ICriteria<T> criteria)
+        {
+            this._criteria = criteria;
+        }
+
+        public bool IsSatisfiedBy(T item)
+        {
+            return !_criteria.IsSatisfiedBy(item);
         }
     }
 }

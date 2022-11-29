@@ -60,7 +60,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsButNotMice()
         {
-            return _petsInTheStore.GetMatching(Pet.IsNotASpeciesOf(Species.Mouse));
+            return _petsInTheStore.GetMatching(new Negation<Pet>(Pet.IsASpeciesOf(Species.Mouse)));
         }
 
 
@@ -71,12 +71,12 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllMaleDogs()
         {
-            return _petsInTheStore.GetMatching((pet => pet.sex == Sex.Male && pet.species == Species.Dog));
+            return _petsInTheStore.GetMatching(Pet.IsASexOf(Sex.Male).And(Pet.IsASpeciesOf(Species.Dog)));
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
-            return _petsInTheStore.GetMatching((pet => pet.yearOfBirth > 2011 || pet.species == Species.Rabbit));
+            return _petsInTheStore.GetMatching(Pet.IsBornAfter(2011).Or(Pet.IsASpeciesOf(Species.Rabbit)));
         }
     }
 }
