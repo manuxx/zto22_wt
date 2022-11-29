@@ -57,7 +57,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllCatsOrDogs()
         {
-            return _petsInTheStore.GetMatching(new Alternative(Pet.IsASpeciesOf(Species.Cat), Pet.IsASpeciesOf(Species.Dog)));
+            return _petsInTheStore.GetMatching(new Alternative<Pet>(Pet.IsASpeciesOf(Species.Cat), Pet.IsASpeciesOf(Species.Dog)));
         }
 
         public IEnumerable<Pet> AllPetsButNotMice()
@@ -68,52 +68,18 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllDogsBornAfter2010()
         {
-            return _petsInTheStore.GetMatching(new Conjunction(Pet.IsASpeciesOf(Species.Dog), Pet.IsBornAfter(2010)));
+            return _petsInTheStore.GetMatching(new Conjunction<Pet>(Pet.IsASpeciesOf(Species.Dog), Pet.IsBornAfter(2010)));
         }
 
         public IEnumerable<Pet> AllMaleDogs()
         {
-            return _petsInTheStore.GetMatching(new Conjunction(Pet.IsASpeciesOf(Species.Dog), Pet.IsMale()));
+            return _petsInTheStore.GetMatching(new Conjunction<Pet>(Pet.IsASpeciesOf(Species.Dog), Pet.IsMale()));
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
-            return _petsInTheStore.GetMatching(new Alternative(Pet.IsASpeciesOf(Species.Rabbit),
+            return _petsInTheStore.GetMatching(new Alternative<Pet>(Pet.IsASpeciesOf(Species.Rabbit),
                 Pet.IsBornAfter(2011)));
-        }
-    }
-
-    public class Alternative : ICriteria<Pet>
-    {
-        private readonly ICriteria<Pet> _firstCriteria;
-        private readonly ICriteria<Pet> _secondCriteria;
-
-        public Alternative(ICriteria<Pet> firstCriteria, ICriteria<Pet> secondCriteria)
-        {
-            _firstCriteria = firstCriteria;
-            _secondCriteria = secondCriteria;
-        }
-
-        public bool IsSatisfiedBy(Pet item)
-        {
-            return _firstCriteria.IsSatisfiedBy(item) || _secondCriteria.IsSatisfiedBy(item);
-        }
-    }
-
-    public class Conjunction : ICriteria<Pet>
-    {
-        private readonly ICriteria<Pet> _firstCriteria;
-        private readonly ICriteria<Pet> _secondCriteria;
-
-        public Conjunction(ICriteria<Pet> firstCriteria, ICriteria<Pet> secondCriteria)
-        {
-            _firstCriteria = firstCriteria;
-            _secondCriteria = secondCriteria;
-        }
-
-        public bool IsSatisfiedBy(Pet item)
-        {
-            return _firstCriteria.IsSatisfiedBy(item) && _secondCriteria.IsSatisfiedBy(item);
         }
     }
 }
