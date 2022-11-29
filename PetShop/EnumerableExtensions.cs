@@ -3,28 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using Training.DomainClasses;
 
-static class EnumerableExtensions
+namespace Training.DomainClasses
 {
-    public static IEnumerable<TItem> OneAtATime<TItem>(this IEnumerable<TItem> items)
+    public static class EnumerableExtensions
     {
-        foreach (var item in items)
+        public static IEnumerable<TItem> OneAtATime<TItem>(this IEnumerable<TItem> items)
         {
-            yield return item;
-        }
-    }
-
-    public static IEnumerable<TItem> GetMatching<TItem>(this IEnumerable<TItem> items, Predicate<TItem> condition)
-    {
-        return items.GetMatching(new AnonymousCriteria<TItem>(condition));
-    }
-
-    public static IEnumerable<TItem> GetMatching<TItem>(this IEnumerable<TItem> items, ICriteria<TItem> criteria)
-    {
-        foreach (var item in items)
-        {
-            if (criteria.IsSatisfiedBy(item))
+            foreach (var item in items)
             {
                 yield return item;
+            }
+        }
+
+        public static IEnumerable<TItem> GetMatching<TItem>(this IEnumerable<TItem> items, ICriteria<TItem> criteria)
+        {
+            foreach (var item in items)
+            {
+                if (criteria.IsSatisfiedBy(item))
+                {
+                    yield return item;
+                }
             }
         }
     }
