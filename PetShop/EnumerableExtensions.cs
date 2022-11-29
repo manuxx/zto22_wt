@@ -4,6 +4,10 @@ using System.Diagnostics;
 using PetShop;
 using Training.DomainClasses;
 
+namespace Training.DomainClasses
+{
+}
+
 static class EnumerableExtensions
 {
     public static IEnumerable<TItem> OneAtATime<TItem>(this IEnumerable<TItem> items)

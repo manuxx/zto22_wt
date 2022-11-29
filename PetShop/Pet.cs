@@ -17,7 +17,7 @@ namespace Training.DomainClasses
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((Pet) obj);
+            return Equals((Pet)obj);
         }
 
         public override int GetHashCode()
@@ -47,24 +47,54 @@ namespace Training.DomainClasses
         public float price { get; set; }
         public Species species { get; set; }
 
-        public static Predicate<Pet> IsASpeciesOf(Species species)
+        public static ICriteria<Pet> IsASpeciesOf(Species species)
         {
-            return pet => pet.species == species;
+            return new SpecieCriteria(species);
         }
 
-        public static Predicate<Pet> IsFemale()
+        public static ICriteria<Pet> IsFemale()
         {
-            return pet => pet.sex == Sex.Female;
-        }
-
-        public static Predicate<Pet> IsNotASpeciesOf(Species species)
-        {
-            return pet => pet.species != species;
+            return new SexCriteria(Sex.Female);
         }
 
         public static ICriteria<Pet> IsBornAfter(int year)
         {
             return new BornAfterCriteria(year);
+        }
+
+        public static ICriteria<Pet> IsMale()
+        {
+            return new SexCriteria(Sex.Male);
+        }
+    }
+
+    public class SpecieCriteria : ICriteria<Pet>
+    {
+        private readonly Species _species;
+
+        public SpecieCriteria(Species species)
+        {
+            _species = species;
+        }
+
+        public bool IsSatisfiedBy(Pet item)
+        {
+            return item.species == _species;
+        }
+    }
+
+    public class SexCriteria : ICriteria<Pet>
+    {
+        private readonly Sex _sex;
+
+        public SexCriteria(Sex sex)
+        {
+            _sex = sex;
+        }
+
+        public bool IsSatisfiedBy(Pet item)
+        {
+            return item.sex == _sex;
         }
     }
 
