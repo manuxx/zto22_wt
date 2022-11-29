@@ -66,6 +66,11 @@ namespace Training.DomainClasses
             return new BornAfterCriteria(year);
         }
 
+        public static ICriteria<Pet> IsMale()
+        {
+            return new SexCriteria(Sex.Male);
+        }
+
         private class Negation<TItem> : ICriteria<TItem>
         {
             private ICriteria<TItem> _criteriaToNegate;

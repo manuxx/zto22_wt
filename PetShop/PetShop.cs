@@ -55,7 +55,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllCatsOrDogs()
         {
-            return _petsInTheStore.GetMatching((pet => pet.species==Species.Cat || pet.species == Species.Dog));
+            return _petsInTheStore.GetMatching(new Alternative<Pet>(Pet.IsASpeciesOf(Species.Dog), Pet.IsASpeciesOf(Species.Cat)));
         }
 
         public IEnumerable<Pet> AllPetsButNotMice()
@@ -71,12 +71,46 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllMaleDogs()
         {
-            return _petsInTheStore.GetMatching((pet => pet.sex == Sex.Male && pet.species == Species.Dog));
+            return _petsInTheStore.GetMatching(new Conjunction<Pet>(Pet.IsASpeciesOf(Species.Dog), Pet.IsMale()));
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
             return _petsInTheStore.GetMatching((pet => pet.yearOfBirth > 2011 || pet.species == Species.Rabbit));
+        }
+
+        private class Conjunction<TItem> : ICriteria<TItem>
+        {
+            private ICriteria<TItem> criteria1;
+            private ICriteria<TItem> criteria2;
+
+            public Conjunction(ICriteria<TItem> criteria1, ICriteria<TItem> criteria2)
+            {
+                this.criteria1 = criteria1;
+                this.criteria2 = criteria2;
+            }
+
+            public bool IsSatisfiedBy(TItem item)
+            {
+                return criteria1.IsSatisfiedBy(item) && criteria2.IsSatisfiedBy(item);
+            }
+        }
+
+        private class Alternative<TItem> : ICriteria<TItem>
+        {
+            private ICriteria<TItem> criteria1;
+            private ICriteria<TItem> criteria2;
+
+            public Alternative(ICriteria<TItem> criteria1, ICriteria<TItem> criteria2)
+            {
+                this.criteria1 = criteria1;
+                this.criteria2 = criteria2;
+            }
+
+            public bool IsSatisfiedBy(TItem item)
+            {
+                return criteria1.IsSatisfiedBy(item) || criteria2.IsSatisfiedBy(item);
+            }
         }
     }
 }
