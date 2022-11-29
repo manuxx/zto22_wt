@@ -1,27 +1,22 @@
-﻿namespace Training.DomainClasses
+﻿using System.Reflection.Metadata.Ecma335;
+
+namespace Training.DomainClasses
 {
-    public partial class PetShop
+    public class Conjunction<TItem> : ICriteria<TItem>
     {
-        private class Conjunction<TItem> : ICriteria<TItem>
+        private readonly ICriteria<TItem> _criteria1;
+        private readonly ICriteria<TItem> _criteria2;
+
+        public Conjunction(ICriteria<TItem> criteria1, ICriteria<TItem> criteria2)
         {
-            private ICriteria<TItem>[] _criterias;
+            _criteria1 = criteria1;
+            _criteria2 = criteria2;
+        }
 
-            public Conjunction(params ICriteria<TItem>[] criterias)
-            {
-                this._criterias = criterias;
-            }
-
-            public bool IsSatisfiedBy(TItem item)
-            {
-                foreach(var criterion in _criterias)
-                {
-                    if (!criterion.IsSatisfiedBy(item))
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
+        public bool IsSatisfiedBy(TItem item)
+        {
+            return _criteria1.IsSatisfiedBy(item) &&
+                   _criteria2.IsSatisfiedBy(item);
         }
     }
 }
