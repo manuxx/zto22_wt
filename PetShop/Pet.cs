@@ -2,9 +2,6 @@ using System;
 
 namespace Training.DomainClasses
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
     public class Pet : IEquatable<Pet>
     {
         public bool Equals(Pet other)
@@ -59,100 +56,58 @@ namespace Training.DomainClasses
             return new SexCriteria(Sex.Female);
         }
 
-        public static ICriteria<Pet> IsMale()
-        {
-            return new SexCriteria(Sex.Male);
-        }
-
         public static ICriteria<Pet> IsBornAfter(int year)
         {
             return new BornAfterCriteria(year);
         }
-    }
-    
-    public class SexCriteria : ICriteria<Pet>
-    {
-        private readonly Sex _sex;
-        public SexCriteria(Sex sex)
+        public class SpeciesCriteria : ICriteria<Pet>
         {
-            _sex = sex;
+            private readonly Species _species;
+
+            public SpeciesCriteria(Species species)
+            {
+                _species = species;
+            }
+
+            public bool IsSatisfiedBy(Pet pet)
+            {
+                return pet.species == _species;
+            }
         }
 
-        public bool IsSatisfiedBy(Pet pet)
+        public class SexCriteria : ICriteria<Pet>
         {
-            return pet.sex == _sex;
-        }
-    }
+            private readonly Sex _sex;
 
-    public class SpeciesCriteria : ICriteria<Pet>
-    {
-        private readonly Species _species;
-        public SpeciesCriteria(Species species)
-        {
-            _species = species;
-        }
-        
-        public bool IsSatisfiedBy(Pet pet)
-        {
-            return pet.species == _species;
-        }
-    }
+            public SexCriteria(Sex sex)
+            {
+                _sex = sex;
+            }
 
-    public class BornAfterCriteria : ICriteria<Pet>
-    {
-        private readonly int _year;
-
-        public BornAfterCriteria(int year)
-        {
-            _year = year;
+            public bool IsSatisfiedBy(Pet pet)
+            {
+                return pet.sex == _sex;
+            }
         }
 
-        public bool IsSatisfiedBy(Pet item)
+        public class BornAfterCriteria : ICriteria<Pet>
         {
-            return item.yearOfBirth > _year;
-        }
-    }
+            private readonly int _year;
 
-    public class Negation<TItem> : ICriteria<TItem>
-    {
-        private readonly ICriteria<TItem> _criteria;
+            public BornAfterCriteria(int year)
+            {
+                _year = year;
+            }
 
-        public Negation(ICriteria<TItem> criteria)
-        {
-            _criteria = criteria;
+            public bool IsSatisfiedBy(Pet pet)
+            {
+                return pet.yearOfBirth > _year;
+            }
         }
 
-        public bool IsSatisfiedBy(TItem item)
+        public static ICriteria<Pet> IsMale()
         {
-            return !_criteria.IsSatisfiedBy(item);
-        }
-    }
-    
-    public class Conjunction<T> : ICriteria<Pet>
-    {
-        private readonly List<ICriteria<Pet>> _criteriaList = new List<ICriteria<Pet>>();
-        public Conjunction(params ICriteria<Pet>[] criteriaList)
-        {
-            _criteriaList.AddRange(criteriaList);
-        }
-        
-        public bool IsSatisfiedBy(Pet item)
-        {
-            return _criteriaList.All(c => c.IsSatisfiedBy(item));
-        }
-    }
-    
-    public class Alternative<T> : ICriteria<Pet>
-    {
-        private readonly List<ICriteria<Pet>> _criteriaList = new List<ICriteria<Pet>>();
-        public Alternative(params ICriteria<Pet>[] criteriaList)
-        {
-            _criteriaList.AddRange(criteriaList);
-        }
-        
-        public bool IsSatisfiedBy(Pet item)
-        {
-            return _criteriaList.Any(c => c.IsSatisfiedBy(item));
+            return new SexCriteria(Sex.Male);
         }
     }
 }
