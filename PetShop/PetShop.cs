@@ -50,7 +50,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllFemalePets()
         {
-            return _petsInTheStore.GetMatching(Pet.IsFemale());
+            return _petsInTheStore.GetMatching(new SexCriteria(Sex.Female));
         }
 
         public IEnumerable<Pet> AllCatsOrDogs()
@@ -60,13 +60,13 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsButNotMice()
         {
-            return _petsInTheStore.GetMatching(Pet.IsNotASpeciesOf(Species.Mouse));
+            return _petsInTheStore.GetMatching(new Negation<Pet>(Pet.IsASpeciesOf(Species.Mouse)));
         }
 
 
         public IEnumerable<Pet> AllDogsBornAfter2010()
         {
-            return _petsInTheStore.GetMatching((pet => pet.species == Species.Dog && pet.yearOfBirth > 2010));
+            return _petsInTheStore.GetMatching(new Conjunction<Pet>(Pet.IsASpeciesOf(Species.Dog), Pet.IsBornAfter(2010)));
         }
 
         public IEnumerable<Pet> AllMaleDogs()
@@ -77,6 +77,24 @@ namespace Training.DomainClasses
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
             return _petsInTheStore.GetMatching((pet => pet.yearOfBirth > 2011 || pet.species == Species.Rabbit));
+        }
+    }
+
+    public class Conjunction<TItem> : ICriteria<TItem>
+    {
+        public Conjunction(ICriteria<TItem> firstCriteria, ICriteria<TItem> secondCriteria)
+        {
+            FirstCriteria = firstCriteria;
+            SecondCriteria = secondCriteria;
+        }
+
+        public ICriteria<TItem> SecondCriteria { get; set; }
+
+        public ICriteria<TItem> FirstCriteria { get; set; }
+
+        public bool IsSatisfiedBy(TItem item)
+        {
+            return FirstCriteria.IsSatisfiedBy(item) && SecondCriteria.IsSatisfiedBy(item);
         }
     }
 }
