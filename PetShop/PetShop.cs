@@ -1,6 +1,8 @@
 using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Training.DomainClasses
 {
@@ -76,21 +78,36 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
-            return _petsInTheStore.GetMatching((pet => pet.yearOfBirth > 2011 || pet.species == Species.Rabbit));
+            return _petsInTheStore.GetMatching(new Alternative<Pet>(Pet.IsBornAfter(2011), Pet.IsASpeciesOf(Species.Rabbit)));
+        }
+    }
+
+    public class Alternative<TItem> : ICriteria<TItem>
+    {
+        private readonly ICriteria<TItem> FirstCriteria;
+        private readonly ICriteria<TItem> SecondCriteria;
+
+        public Alternative(ICriteria<TItem> firstCriteria, ICriteria<TItem> secondCriteria)
+        {
+            this.FirstCriteria = firstCriteria;
+            this.SecondCriteria = secondCriteria;
+        }
+
+        public bool IsSatisfiedBy(TItem item)
+        {
+            return FirstCriteria.IsSatisfiedBy(item) || SecondCriteria.IsSatisfiedBy(item);
         }
     }
 
     public class Conjunction<TItem> : ICriteria<TItem>
     {
+        private readonly ICriteria<TItem> SecondCriteria;
+        private readonly ICriteria<TItem> FirstCriteria;
         public Conjunction(ICriteria<TItem> firstCriteria, ICriteria<TItem> secondCriteria)
         {
             FirstCriteria = firstCriteria;
             SecondCriteria = secondCriteria;
         }
-
-        public ICriteria<TItem> SecondCriteria { get; set; }
-
-        public ICriteria<TItem> FirstCriteria { get; set; }
 
         public bool IsSatisfiedBy(TItem item)
         {
