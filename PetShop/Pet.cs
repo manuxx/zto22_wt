@@ -56,11 +56,6 @@ namespace Training.DomainClasses
             return new SexCriteria(Sex.Female);
         }
 
-        public static ICriteria<Pet> IsNotASpeciesOf(Species species)
-        {
-            return new Negation<Pet>(IsASpeciesOf(species));
-        }
-
         public static ICriteria<Pet> IsBornAfter(int year)
         {
             return new BornAfterCriteria(year);
@@ -108,6 +103,11 @@ namespace Training.DomainClasses
             {
                 return pet.yearOfBirth > _year;
             }
+        }
+
+        public static ICriteria<Pet> IsMale()
+        {
+            throw new NotImplementedException();
         }
     }
 

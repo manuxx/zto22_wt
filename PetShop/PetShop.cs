@@ -60,7 +60,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsButNotMice()
         {
-            return _petsInTheStore.GetMatching(Pet.IsNotASpeciesOf(Species.Mouse));
+            return _petsInTheStore.GetMatching(new Negation<Pet>(Pet.IsASpeciesOf(Species.Mouse)));
         }
 
 
@@ -71,12 +71,25 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllMaleDogs()
         {
-            return _petsInTheStore.GetMatching((pet => pet.sex == Sex.Male && pet.species == Species.Dog));
+            return _petsInTheStore.GetMatching(new Conjunction(Pet.IsASpeciesOf(Species.Dog),Pet.IsMale() ));
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
             return _petsInTheStore.GetMatching((pet => pet.yearOfBirth > 2011 || pet.species == Species.Rabbit));
+        }
+    }
+
+    public class Conjunction : ICriteria<Pet>
+    {
+        public Conjunction(ICriteria<Pet> isASpeciesOf, ICriteria<Pet> isMale)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSatisfiedBy(Pet item)
+        {
+            throw new NotImplementedException();
         }
     }
 }
