@@ -28,7 +28,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllCats()
         {
-            return _petsInTheStore.GetMatching(Pet.IsASpeciesOf(Species.Cat));
+            return _petsInTheStore.GetMatching(new Pet.SpeciesCriteria(Species.Cat));
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2010()
