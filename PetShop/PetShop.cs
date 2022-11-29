@@ -6,7 +6,7 @@ namespace Training.DomainClasses
 {
     public class PetShop
     {
-        private IList<Pet> _petsInTheStore;
+        private readonly IList<Pet> _petsInTheStore;
 
         public PetShop(IList<Pet> petsInTheStore)
         {
@@ -28,7 +28,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllCats()
         {
-            return _petsInTheStore.GetMatching(Pet.IsASpeciesOf(Species.Cat));
+            return _petsInTheStore.GetMatching(new Pet.SpeciesCriteria(Species.Cat));
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2010()
@@ -45,7 +45,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllMice()
         {
-            return _petsInTheStore.GetMatching(Pet.IsASpeciesOf(Species.Mouse));
+            return _petsInTheStore.GetMatching(new Pet.SpeciesCriteria(Species.Mouse));
         }
 
         public IEnumerable<Pet> AllFemalePets()

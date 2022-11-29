@@ -46,39 +46,100 @@ namespace Training.DomainClasses
         public float price { get; set; }
         public Species species { get; set; }
 
-        public static Predicate<Pet> IsASpeciesOf(Species species)
+        public static ICriteria<Pet> IsFemale()
         {
-            return pet => pet.species == species;
+            return new SexCriteria(Sex.Female);
         }
 
-        public static Predicate<Pet> IsFemale()
+        public static ICriteria<Pet> IsNotASpeciesOf(Species species)
         {
-            return pet => pet.sex == Sex.Female;
+            return new Negation<Pet>(IsASpeciesOf(species));
         }
 
-        public static Predicate<Pet> IsNotASpeciesOf(Species species)
+        public static ICriteria<Pet> IsASpeciesOf(Species species)
         {
-            return pet => pet.species != species;
+            return new SpeciesCriteria(species);
         }
 
         public static ICriteria<Pet> IsBornAfter(int year)
         {
             return new BornAfterCriteria(year);
         }
-    }
 
-    public class BornAfterCriteria : ICriteria<Pet>
-    {
-        private readonly int _year;
-
-        public BornAfterCriteria(int year)
+        public class SexCriteria : ICriteria<Pet>
         {
-            _year = year;
+            private readonly Sex _sex;
+
+            public SexCriteria(Sex sex)
+            {
+                _sex = sex;
+            }
+
+            public bool IsSatisfiedBy(Pet item)
+            {
+                return item.sex == _sex;
+            }
         }
 
-        public bool IsSatisfiedBy(Pet item)
+        public class SpeciesCriteria : ICriteria<Pet>
         {
-            return item.yearOfBirth > _year;
+            private readonly Species _species;
+
+            public SpeciesCriteria(Species species)
+            {
+                _species = species;
+            }
+
+            public bool IsSatisfiedBy(Pet item)
+            {
+                return item.species == _species;
+            }
+        }
+
+        public class BornAfterCriteria : ICriteria<Pet>
+        {
+            private readonly int _year;
+
+            public BornAfterCriteria(int year)
+            {
+                _year = year;
+            }
+
+            public bool IsSatisfiedBy(Pet item)
+            {
+                return item.yearOfBirth > _year;
+            }
+        }
+    }
+
+    public class Negation<TItem> : ICriteria<TItem>
+    {
+        private readonly ICriteria<TItem> _criteriaToNegate;
+        public Negation(ICriteria<TItem> criteriaToNegate)
+        {
+            _criteriaToNegate = criteriaToNegate;
+        }
+
+        public bool IsSatisfiedBy(TItem item)
+        {
+            return !_criteriaToNegate.IsSatisfiedBy(item);
+        }
+    }
+
+    public class Conjunction<TItem> : ICriteria<TItem>
+    {
+        private readonly ICriteria<TItem> _criteria;
+        private readonly ICriteria<TItem> _secondCriteria;
+
+        public Conjunction(ICriteria<TItem> criteria, ICriteria<TItem> secondCriteria)
+        {
+            _criteria = criteria;
+            _secondCriteria = secondCriteria;
+        }
+
+        public bool IsSatisfiedBy(TItem item)
+        {
+            return _criteria.IsSatisfiedBy(item) && _secondCriteria.IsSatisfiedBy(item);
         }
     }
 }
