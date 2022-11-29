@@ -46,14 +46,14 @@ namespace Training.DomainClasses
         public float price { get; set; }
         public Species species { get; set; }
 
-        public static Predicate<Pet> IsASpeciesOf(Species species)
+        public static ICriteria<Pet> IsASpeciesOf(Species species)
         {
-            return pet => pet.species == species;
+            return new SpeciesCriteria(species);
         }
 
-        public static Predicate<Pet> IsFemale()
+        public static ICriteria<Pet> IsFemale()
         {
-            return pet => pet.sex == Sex.Female;
+            return new SexCriteria(Sex.Female);
         }
 
         public static Predicate<Pet> IsNotASpeciesOf(Species species)
@@ -65,20 +65,50 @@ namespace Training.DomainClasses
         {
             return new BornAfterCriteria(year);
         }
-    }
 
-    public class BornAfterCriteria : ICriteria<Pet>
-    {
-        private readonly int _year;
-
-        public BornAfterCriteria(int year)
+        public class SpeciesCriteria : ICriteria<Pet>
         {
-            _year = year;
+            private readonly Species _species;
+
+            public SpeciesCriteria(Species species)
+            {
+                _species = species;
+            }
+
+            public bool IsSatisfiedBy(Pet item)
+            {
+                return item.species == _species;
+            }
         }
 
-        public bool IsSatisfiedBy(Pet item)
+        public class SexCriteria : ICriteria<Pet>
         {
-            return item.yearOfBirth > _year;
+            private readonly Sex _sex;
+
+            public SexCriteria(Sex sex)
+            {
+                _sex = sex;
+            }
+
+            public bool IsSatisfiedBy(Pet item)
+            {
+                return item.sex == _sex;
+            }
+        }
+
+        public class BornAfterCriteria : ICriteria<Pet>
+        {
+            private readonly int _year;
+
+            public BornAfterCriteria(int year)
+            {
+                _year = year;
+            }
+
+            public bool IsSatisfiedBy(Pet item)
+            {
+                return item.yearOfBirth > _year;
+            }
         }
     }
 }
