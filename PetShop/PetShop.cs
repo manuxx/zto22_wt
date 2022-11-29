@@ -71,12 +71,29 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllMaleDogs()
         {
-            return _petsInTheStore.GetMatching((pet => pet.sex == Sex.Male && pet.species == Species.Dog));
+            return _petsInTheStore.GetMatching(new Conjunction(Pet.IsASpeciesOf(Species.Dog), Pet.IsMale()));
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
             return _petsInTheStore.GetMatching((pet => pet.yearOfBirth > 2011 || pet.species == Species.Rabbit));
+        }
+    }
+
+    public class Conjunction : ICriteria<Pet>
+    {
+        private readonly ICriteria<Pet> _firstCriteria;
+        private readonly ICriteria<Pet> _secondCriteria;
+
+        public Conjunction(ICriteria<Pet> firstCriteria, ICriteria<Pet> secondCriteria)
+        {
+            _firstCriteria = firstCriteria;
+            _secondCriteria = secondCriteria;
+        }
+
+        public bool IsSatisfiedBy(Pet item)
+        {
+            return _firstCriteria.IsSatisfiedBy(item) && _secondCriteria.IsSatisfiedBy(item);
         }
     }
 }
