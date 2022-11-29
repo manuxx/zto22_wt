@@ -107,7 +107,7 @@ namespace Training.DomainClasses
 
         public static ICriteria<Pet> IsMale()
         {
-            throw new NotImplementedException();
+            return new SexCriteria(Sex.Male);
         }
     }
 
