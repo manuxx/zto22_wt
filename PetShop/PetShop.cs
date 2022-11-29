@@ -76,7 +76,15 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
-            return _petsInTheStore.GetMatching((pet => pet.yearOfBirth > 2011 || pet.species == Species.Rabbit));
+            return _petsInTheStore.GetMatching(new Alternative(Pet.IsBornAfter(2011), Pet.IsASpeciesOf(Species.Rabbit)));
+        }
+    }
+
+    public class Alternative : ICriteria<Pet>
+    {
+        public Alternative(ICriteria<Pet> isBornAfter, ICriteria<Pet> isASpeciesOf)
+        {
+            throw new NotImplementedException();
         }
     }
 
