@@ -1,6 +1,8 @@
 using System;
 using System.Buffers;
+using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Training.DomainClasses
 {
@@ -55,7 +57,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllCatsOrDogs()
         {
-            return _petsInTheStore.GetMatching((pet => pet.species==Species.Cat || pet.species == Species.Dog));
+            return _petsInTheStore.GetMatching(new Alternative(Pet.IsASpeciesOf(Species.Cat), Pet.IsASpeciesOf(Species.Dog)));
         }
 
         public IEnumerable<Pet> AllPetsButNotMice()
@@ -66,7 +68,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllDogsBornAfter2010()
         {
-            return _petsInTheStore.GetMatching((pet => pet.species == Species.Dog && pet.yearOfBirth > 2010));
+            return _petsInTheStore.GetMatching(new Conjunction(Pet.IsASpeciesOf(Species.Dog), Pet.IsBornAfter(2010)));
         }
 
         public IEnumerable<Pet> AllMaleDogs()
@@ -76,7 +78,25 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
-            return _petsInTheStore.GetMatching((pet => pet.yearOfBirth > 2011 || pet.species == Species.Rabbit));
+            return _petsInTheStore.GetMatching(new Alternative(Pet.IsASpeciesOf(Species.Rabbit),
+                Pet.IsBornAfter(2011)));
+        }
+    }
+
+    public class Alternative : ICriteria<Pet>
+    {
+        private readonly ICriteria<Pet> _firstCriteria;
+        private readonly ICriteria<Pet> _secondCriteria;
+
+        public Alternative(ICriteria<Pet> firstCriteria, ICriteria<Pet> secondCriteria)
+        {
+            _firstCriteria = firstCriteria;
+            _secondCriteria = secondCriteria;
+        }
+
+        public bool IsSatisfiedBy(Pet item)
+        {
+            return _firstCriteria.IsSatisfiedBy(item) || _secondCriteria.IsSatisfiedBy(item);
         }
     }
 
