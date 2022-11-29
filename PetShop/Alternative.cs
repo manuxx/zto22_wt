@@ -4,16 +4,23 @@ namespace Training.DomainClasses
     {
         private readonly ICriteria<TItem> _criteria1;
         private readonly ICriteria<TItem> _criteria2;
+        private readonly ICriteria<TItem>[] _criterias;
 
-        public Alternative(ICriteria<TItem> criteria1, ICriteria<TItem> criteria2)
+        public Alternative(params ICriteria<TItem>[] criterias)
         {
-            _criteria1 = criteria1;
-            _criteria2 = criteria2;
+            _criterias = criterias;
         }
 
         public bool IsSatisfiedBy(TItem item)
         {
-            return _criteria1.IsSatisfiedBy(item) || _criteria2.IsSatisfiedBy(item);
+            foreach (var criteria in _criterias)
+            {
+                if (criteria.IsSatisfiedBy(item))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
