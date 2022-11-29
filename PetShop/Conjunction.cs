@@ -1,24 +1,14 @@
 namespace Training.DomainClasses
 {
-    public class Conjunction<TItem> : ICriteria<TItem>
+    public class Conjunction<TItem> : BinaryCriteria<TItem>
     {
-        private readonly ICriteria<TItem>[] _criterias;
-
-        public Conjunction(params ICriteria<TItem>[] criterias)
+        public Conjunction(ICriteria<TItem> firstCriteria, ICriteria<TItem> secondCriteria) : base(firstCriteria, secondCriteria)
         {
-            _criterias = criterias;
         }
 
-        public bool IsSatisfiedBy(TItem item)
+        public override bool IsSatisfiedBy(TItem item)
         {
-            foreach (var criteria in _criterias)
-            {
-                if (!criteria.IsSatisfiedBy(item))
-                {
-                    return false;
-                }
-            }
-            return true;
+            return _firstCriteria.IsSatisfiedBy(item) && _secondCriteria.IsSatisfiedBy(item);
         }
     }
 }
