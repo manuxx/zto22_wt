@@ -81,4 +81,34 @@ namespace Training.DomainClasses
             return item.yearOfBirth > _year;
         }
     }
+
+    public class SpeciesCriteria : ICriteria<Pet>
+    {
+        private readonly Species species;
+
+        public SpeciesCriteria(Species species)
+        {
+            this.species = species;
+        }
+
+        public bool IsSatisfiedBy(Pet item)
+        {
+            return item.species.Equals(species);
+        }
+    }
+
+    public class SexCriteria : ICriteria<Pet>
+    {
+        private readonly Sex sex;
+
+        public SexCriteria(Sex sex)
+        {
+            this.sex = sex;
+        }
+
+        public bool IsSatisfiedBy(Pet item)
+        {
+            return item.sex.Equals(sex);
+        }
+    }
 }
