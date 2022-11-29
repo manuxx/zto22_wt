@@ -60,19 +60,20 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsButNotMice()
         {
-            return _petsInTheStore.GetMatching(Pet.IsNotASpeciesOf(new Negation<Pet>(IsSpeciesOf(Species.Mouse))));
+            return _petsInTheStore.GetMatching(new Negation<Pet>(Pet.IsASpeciesOf(Species.Mouse)));
             // dekorator- rozszerza i zmieniadzialanie (jeszcze jest adapter)
         }
 
 
         public IEnumerable<Pet> AllDogsBornAfter2010()
         {
-            return _petsInTheStore.GetMatching((pet => pet.species == Species.Dog && pet.yearOfBirth > 2010));
+            return _petsInTheStore.GetMatching(new Conjunction(Pet.IsASpeciesOf(Species.Dog), Pet.IsBornAfter(2010)));
+            //kompozyt
         }
 
         public IEnumerable<Pet> AllMaleDogs()
         {
-            return _petsInTheStore.GetMatching((pet => pet.sex == Sex.Male && pet.species == Species.Dog));
+            return _petsInTheStore.GetMatching(new Conjunction(new Negation<Pet>(Pet.IsFemale()), Pet.IsASpeciesOf(Species.Dog))); 
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
@@ -81,15 +82,31 @@ namespace Training.DomainClasses
         }
     }
 
-    public class Negation : ICriteria<Pet>
+    public class Conjunction : ICriteria<Pet>
     {
-        private readonly ICriteria<Pet> _isSpeciesOf;
-        public Negation(ICriteria<Pet> isSpeciesOf)
+        private readonly ICriteria<Pet> _criteria1;
+        private readonly ICriteria<Pet> _criteria2;
+        public Conjunction(ICriteria<Pet> criteria1, ICriteria<Pet> criteria2)
+        {
+            _criteria1 = criteria1;
+            _criteria2 = criteria2;
+        }
+
+        public bool IsSatisfiedBy(Pet item)
+        {
+            return _criteria1.IsSatisfiedBy(item) && _criteria2.IsSatisfiedBy(item);
+        }
+    }
+
+    public class Negation<TItem> : ICriteria<TItem>
+    {
+        private readonly ICriteria<TItem> _isSpeciesOf;
+        public Negation(ICriteria<TItem> isSpeciesOf)
         {
             _isSpeciesOf = isSpeciesOf;
         }
 
-        public bool IsSatisfiedBy(Pet item)
+        public bool IsSatisfiedBy(TItem item)
         {
             return !_isSpeciesOf.IsSatisfiedBy(item);
         }
