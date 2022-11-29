@@ -71,7 +71,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllMaleDogs()
         {
-            return _petsInTheStore;
+            return _petsInTheStore.GetMatching(new Conjunction<Pet>(Pet.IsASpeciesOf(Species.Dog),Pet.IsMale() ));
         }
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
@@ -97,26 +97,30 @@ namespace Training.DomainClasses
         }
     }
 
-    public class Conjunction<TItem> : ICriteria<TItem>
+    public abstract class BinaryCriteria<TItem> : ICriteria<TItem>
     {
-        private readonly ICriteria<TItem>[] _criterias;
+        protected ICriteria<TItem> _criteria1;
+        protected ICriteria<TItem> _criteria2;
 
-        public Conjunction(ICriteria<TItem>[] criterias)
+        public BinaryCriteria(ICriteria<TItem> criteria1, ICriteria<TItem> criteria2)
         {
-            _criterias = criterias;
+            _criteria1 = criteria1;
+            _criteria2 = criteria2;
         }
 
-        public bool IsSatisfiedBy(TItem item)
+        public abstract bool IsSatisfiedBy(TItem item);
+    }
+
+    public class Conjunction<TItem> : BinaryCriteria<TItem>
+    {
+        public Conjunction(ICriteria<TItem> criteria1, ICriteria<TItem> criteria2) : base(criteria1, criteria2)
         {
-            foreach (var criterium in _criterias)
-            {
-                if (criterium.IsSatisfiedBy(item))
-                {
-                    return false;
-                }
-            }
-            
-            return true;
+        }
+
+        public override bool IsSatisfiedBy(TItem item)
+        {
+            return _criteria1.IsSatisfiedBy(item) &&
+                   _criteria2.IsSatisfiedBy(item);
         }
     }
 }
