@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Training.DomainClasses
 {
-    public class PetShop
+    public partial class PetShop
     {
         private IList<Pet> _petsInTheStore;
 
@@ -76,41 +76,7 @@ namespace Training.DomainClasses
 
         public IEnumerable<Pet> AllPetsBornAfter2011OrRabbits()
         {
-            return _petsInTheStore.GetMatching((pet => pet.yearOfBirth > 2011 || pet.species == Species.Rabbit));
-        }
-
-        private class Conjunction<TItem> : ICriteria<TItem>
-        {
-            private ICriteria<TItem> criteria1;
-            private ICriteria<TItem> criteria2;
-
-            public Conjunction(ICriteria<TItem> criteria1, ICriteria<TItem> criteria2)
-            {
-                this.criteria1 = criteria1;
-                this.criteria2 = criteria2;
-            }
-
-            public bool IsSatisfiedBy(TItem item)
-            {
-                return criteria1.IsSatisfiedBy(item) && criteria2.IsSatisfiedBy(item);
-            }
-        }
-
-        private class Alternative<TItem> : ICriteria<TItem>
-        {
-            private ICriteria<TItem> criteria1;
-            private ICriteria<TItem> criteria2;
-
-            public Alternative(ICriteria<TItem> criteria1, ICriteria<TItem> criteria2)
-            {
-                this.criteria1 = criteria1;
-                this.criteria2 = criteria2;
-            }
-
-            public bool IsSatisfiedBy(TItem item)
-            {
-                return criteria1.IsSatisfiedBy(item) || criteria2.IsSatisfiedBy(item);
-            }
+            return _petsInTheStore.GetMatching(new Alternative<Pet>(Pet.IsBornAfter(2011), Pet.IsASpeciesOf(Species.Rabbit)));
         }
     }
 }
