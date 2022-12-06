@@ -13,7 +13,7 @@ static public class EnumerableExtensions
         }
     }
 
-    public static IEnumerable<TItem> GetMatching<TItem>(this IEnumerable<TItem> items, ICriteria<TItem> criteria)
+    public static IEnumerable<TItem> ThatSatisfy<TItem>(this IEnumerable<TItem> items, ICriteria<TItem> criteria)
     {
         foreach (var item in items)
         {

@@ -201,22 +201,22 @@ namespace Training.Specificaton
     {
         private It should_be_able_to_find_all_cats = () =>
         {
-            ICriteria<Pet> criteria = CriteriaBuilderExtensions.IsEqualTo(Where<Pet>.HasAn(pet => pet.species), Species.Cat);
-            var foundPets = subject.AllPets().GetMatching(criteria);
+            ICriteria<Pet> criteria = Where<Pet>.HasAn(pet => pet.species).EqualTo(Species.Cat);
+            var foundPets = subject.AllPets().ThatSatisfy(criteria);
             foundPets.ShouldContainOnly(cat_Tom, cat_Jinx);
         };
 
         private It should_be_able_to_find_all_mice = () =>
         {
-            var criteria = CriteriaBuilderExtensions.IsEqualTo(Where<Pet>.HasAn(p=>p.species), Species.Mouse);
-            var foundPets = subject.AllPets().GetMatching(criteria);
+            var criteria = Where<Pet>.HasAn(p=>p.species).EqualTo(Species.Mouse);
+            var foundPets = subject.AllPets().ThatSatisfy(criteria);
             foundPets.ShouldContainOnly(mouse_Dixie, mouse_Jerry);
         };
 
         private It should_be_able_to_find_all_female_pets = () =>
         {
-            var criteria = CriteriaBuilderExtensions.IsEqualTo(Where<Pet>.HasAn(p => p.sex), Sex.Female);
-            var foundPets = subject.AllPets().GetMatching(criteria);
+            var criteria = Where<Pet>.HasAn(p => p.sex).EqualTo(Sex.Female);
+            var foundPets = subject.AllPets().ThatSatisfy(criteria);
             foundPets.ShouldContainOnly(dog_Lassie, mouse_Dixie);
         };
         
@@ -234,8 +234,8 @@ namespace Training.Specificaton
        
         private It should_be_able_to_find_all_pets_born_after_2010 = () =>
         {
-            var criteria = CriteriaBuilderExtensions.IsGreaterThan(Where<Pet>.HasAn(p => p.yearOfBirth), 2010);
-            var foundPets = subject.AllPets().GetMatching(criteria);
+            var criteria = Where<Pet>.HasAn(p => p.yearOfBirth).IsGreaterThan(2010);
+            var foundPets = subject.AllPets().ThatSatisfy(criteria);
             foundPets.ShouldContainOnly(dog_Pluto, rabbit_Fluffy, mouse_Dixie, mouse_Jerry);
         };
         private It should_be_able_to_find_all_young_dogs = () =>
@@ -259,17 +259,17 @@ namespace Training.Specificaton
 
     internal class Where<TItem>
     {
-        public static CriteriaBuilder<TItem,TProperty> HasAn<TProperty>(Func<TItem, TProperty> selector) 
+        public static FilteringEntryPoint<TItem,TProperty> HasAn<TProperty>(Func<TItem, TProperty> selector) 
         {
-            return new CriteriaBuilder<TItem,TProperty>(selector);
+            return new FilteringEntryPoint<TItem,TProperty>(selector);
         }
     }
 
-    internal class CriteriaBuilder<TItem,TProperty> 
+    internal class FilteringEntryPoint<TItem,TProperty> 
     {
         public readonly Func<TItem, TProperty> _selector;
 
-        public CriteriaBuilder(Func<TItem, TProperty> selector)
+        public FilteringEntryPoint(Func<TItem, TProperty> selector)
         {
             _selector = selector;
         }
