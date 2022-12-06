@@ -209,10 +209,19 @@ namespace Training.Specificaton
             foundPets.ShouldContainOnly(cat_Tom, cat_Jinx);
         };
 
+<<<<<<< Updated upstream
         private static ICollection<Pet> Where(ICollection<Pet> pet)
         {
             
         }
+=======
+        private It should_be_able_to_find_all_cats_with_double_negation = () =>
+        {
+            ICriteria<Pet> criteria = Where<Pet>.HasAn(pet => pet.species).Not().Not().EqualTo(Species.Cat);
+            var foundPets = subject.AllPets().ThatSatisfy(criteria);
+            foundPets.ShouldContainOnly(cat_Tom, cat_Jinx);
+        };
+>>>>>>> Stashed changes
 
         private It should_be_able_to_find_all_mice = () =>
         {
@@ -240,7 +249,10 @@ namespace Training.Specificaton
        
         private It should_be_able_to_find_all_pets_but_not_mice = () =>
         {
-            var foundPets = subject.AllPetsButNotMice();
+            var criteria = Where<Pet>.HasAn(x => x.species).Not().EqualTo(Species.Mouse);
+
+
+            var foundPets = subject.AllPets().ThatSatisfy(criteria);
             foundPets.ShouldContainOnly(cat_Tom, cat_Jinx, dog_Huckelberry, dog_Lassie, dog_Pluto, rabbit_Fluffy);
         };
        
