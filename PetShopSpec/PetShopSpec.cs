@@ -267,22 +267,11 @@ namespace Training.Specificaton
 
     internal class CriteriaBuilder<TItem, TProperty> 
     {
-        private readonly Func<TItem, TProperty> _selector;
+        public readonly Func<TItem, TProperty> _selector;
 
         public CriteriaBuilder(Func<TItem, TProperty> selector)
         {
             _selector = selector;
-        }
-
-        public ICriteria<TItem> IsEqualTo(TProperty value)
-        {
-            return new AnonymousCriteria<TItem>(item=>_selector(item).Equals(value));
-        }
-
-        public ICriteria<TItem> IsGreaterThan<IComparableProperty>(IComparableProperty value)
-            where IComparableProperty : IComparable<TProperty>
-        {
-            return new AnonymousCriteria<TItem>(item => value.CompareTo(_selector(item)) < 0);
         }
     }
 
