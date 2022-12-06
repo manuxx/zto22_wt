@@ -234,7 +234,7 @@ namespace Training.Specificaton
        
         private It should_be_able_to_find_all_pets_born_after_2010 = () =>
         {
-            var criteria = Where<Pet>.HasComparable(p => p.yearOfBirth).IsGreaterThan(2010);
+            var criteria = Where<Pet>.HasAn(p => p.yearOfBirth).IsGreaterThan(2010);
             var foundPets = subject.AllPets().GetMatching(criteria);
             foundPets.ShouldContainOnly(dog_Pluto, rabbit_Fluffy, mouse_Dixie, mouse_Jerry);
         };
@@ -263,10 +263,6 @@ namespace Training.Specificaton
         {
             return new CriteriaBuilder<TItem,TProperty>(selector);
         }
-        public static ComparableCriteriaBuilder<TItem, TProperty> HasComparable<TProperty>(Func<TItem, TProperty> selector) where TProperty : IComparable<TProperty>
-        {
-            return new ComparableCriteriaBuilder<TItem, TProperty>(selector);
-        }
     }
 
     internal class CriteriaBuilder<TItem,TProperty> 
@@ -283,28 +279,12 @@ namespace Training.Specificaton
             return new AnonymousCriteria<TItem>(item=>_selector(item).Equals(value));
         }
 
-
-    }
-
-    internal class ComparableCriteriaBuilder<TItem, TProperty> where TProperty : IComparable<TProperty>
-    {
-        private readonly Func<TItem, TProperty> _selector;
-
-        public ComparableCriteriaBuilder(Func<TItem, TProperty> selector)
+        public ICriteria<TItem> IsGreaterThan(IComparable<TProperty> value)
         {
-            _selector = selector;
-        }
-
-        public ICriteria<TItem> IsEqualTo(TProperty value)
-        {
-            return new AnonymousCriteria<TItem>(item => _selector(item).Equals(value));
-        }
-
-        public ICriteria<TItem> IsGreaterThan(TProperty value)
-        {
-            return new AnonymousCriteria<TItem>(item => _selector(item).CompareTo(value) > 0);
+            return new AnonymousCriteria<TItem>(item => value.CompareTo(_selector(item))<0);
         }
     }
+
 
     class when_sorting_pets : concern_with_pets_for_sorting_and_filtering
     {
