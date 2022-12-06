@@ -279,7 +279,7 @@ namespace Training.Specificaton
             return new AnonymousCriteria<TItem>(item=>_selector(item).Equals(property));
         }
 
-        public ICriteria<TItem> IsGreaterThan(IComparable<TProperty> property)
+        public ICriteria<TItem> IsGreaterThan<TComparableProperty>(TComparableProperty property) where TComparableProperty:IComparable<TProperty>
         {
             return new AnonymousCriteria<TItem>(item => property.CompareTo(_selector(item)) < 0);
         }
