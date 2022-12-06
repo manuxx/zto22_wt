@@ -9,11 +9,12 @@ namespace Training.Specificaton
 
         public static ICriteria<TItem> IsEqualTo<TItem, TProperty>(this FilteringEntryPoint<TItem, TProperty> filteringEntryPoint, TProperty propertyValue)
         {
+            var resultCriteria = new AnonymousCriteria<TItem>(item => filteringEntryPoint._selector(item).Equals(propertyValue));
             if (filteringEntryPoint._negation)
             {
-                return new AnonymousCriteria<TItem>(item => !filteringEntryPoint._selector(item).Equals(propertyValue));
+                return new Negation<TItem>(resultCriteria);
             }
-            return new AnonymousCriteria<TItem>(item => filteringEntryPoint._selector(item).Equals(propertyValue));
+            return resultCriteria;
         }
 
         public static ICriteria<TItem> IsGreaterThan<TItem, TProperty>(this FilteringEntryPoint<TItem, TProperty> filteringEntryPoint, TProperty propertyValue) where TProperty : IComparable<TProperty>
