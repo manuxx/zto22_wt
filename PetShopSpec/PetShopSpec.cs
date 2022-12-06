@@ -216,6 +216,7 @@ namespace Training.Specificaton
 
         private It should_be_able_to_find_all_mice = () =>
         {
+            ICriteria<Pet> criteria = Where<Pet>.HasAn(pet => pet.species).IsEqualTo(Species.Mouse);
             var foundPets = subject.AllMice();
             foundPets.ShouldContainOnly(mouse_Dixie, mouse_Jerry);
         };
