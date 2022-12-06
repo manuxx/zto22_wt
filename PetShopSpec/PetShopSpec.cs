@@ -234,7 +234,8 @@ namespace Training.Specificaton
        
         private It should_be_able_to_find_all_pets_born_after_2010 = () =>
         {
-            var foundPets = subject.AllPetsBornAfter2010();
+            var criteria = Where<Pet>.HasAn(p => p.yearOfBirth).IsGreaterThan(2010);
+            var foundPets = subject.AllPets().GetMatching(criteria);
             foundPets.ShouldContainOnly(dog_Pluto, rabbit_Fluffy, mouse_Dixie, mouse_Jerry);
         };
         private It should_be_able_to_find_all_young_dogs = () =>
@@ -258,13 +259,13 @@ namespace Training.Specificaton
 
     internal class Where<TItem>
     {
-        public static CriteriaBuilder<TItem, TProperty> HasAn<TProperty>(Func<TItem, TProperty> selector)
+        public static CriteriaBuilder<TItem, TProperty> HasAn<TProperty>(Func<TItem, TProperty> selector) where TProperty : IComparable<TProperty>
         {
             return new CriteriaBuilder<TItem, TProperty>(selector);
         }
     }
 
-    internal class CriteriaBuilder<TItem, TProperty>
+    internal class CriteriaBuilder<TItem, TProperty> where TProperty : IComparable<TProperty>
     {
         private readonly Func<TItem, TProperty> _selector;
 
@@ -276,6 +277,11 @@ namespace Training.Specificaton
         public ICriteria<TItem> IsEqualTo(TProperty value)
         {
             return new AnonymousCriteria<TItem>(item=>_selector(item).Equals(value));
+        }
+
+        public ICriteria<TItem> IsGreaterThan(TProperty value)
+        {
+            return new AnonymousCriteria<TItem>(item => _selector(item).CompareTo(value) > 0);
         }
     }
 
