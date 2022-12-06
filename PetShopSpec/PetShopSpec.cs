@@ -200,8 +200,8 @@ namespace Training.Specificaton
     public class when_searching_for_pets : concern_with_pets_for_sorting_and_filtering
     {
         private It should_be_able_to_find_all_cats = () =>
-        {
-            ICriteria<Pet> criteria = Where<Pet>.HasAn<Species>(pet => pet.species).EqualTo(Species.Cat);
+        { 
+            var criteria = Where<Pet>.HasAn<Species>(pet => pet.species).EqualTo(Species.Cat);
             var foundPets = subject.AllPets().Satisfy(criteria);
             foundPets.ShouldContainOnly(cat_Tom, cat_Jinx);
         };
@@ -228,7 +228,8 @@ namespace Training.Specificaton
        
         private It should_be_able_to_find_all_pets_but_not_mice = () =>
         {
-            var foundPets = subject.AllPetsButNotMice();
+            var criteria = Where<Pet>.HasAn(p => p.species).Not().EqualTo(Species.Mouse);
+            var foundPets = subject.AllPets().Satisfy(criteria);
             foundPets.ShouldContainOnly(cat_Tom, cat_Jinx, dog_Huckelberry, dog_Lassie, dog_Pluto, rabbit_Fluffy);
         };
        

@@ -11,4 +11,5 @@ public static class CriteriaExtensions
     {
         return new Alternative<TItem>(leftCriteria, rightCriteria);
     }
+    
 }
