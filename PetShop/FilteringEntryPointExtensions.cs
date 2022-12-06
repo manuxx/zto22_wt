@@ -4,7 +4,13 @@ public static class FilteringEntryPointExtensions
 {
     public static ICriteria<TItem> EqualTo<TItem, TProperty>(this FilteringEntryPoint<TItem, TProperty> filteringEntryPoint, TProperty value)
     {
-        return new AnonymousCriteria<TItem>(item=> filteringEntryPoint._selector(item).Equals(value));
+        return new AnonymousCriteria<TItem>(item =>
+        {
+            if (filteringEntryPoint._negationActive)
+                return !filteringEntryPoint._selector(item).Equals(value);
+            else
+                return filteringEntryPoint._selector(item).Equals(value);
+        });
     }
 
     public static ICriteria<TItem> GreaterThan<TProperty, TItem>(this FilteringEntryPoint<TItem, TProperty> filteringEntryPoint, TProperty value)
