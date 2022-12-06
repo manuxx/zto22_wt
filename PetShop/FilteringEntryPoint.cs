@@ -6,12 +6,11 @@ namespace Training.Specificaton
     {
         public readonly Func<TItem, TProperty> _selector;
         public readonly bool _negationActive;
-        public FilteringEntryPoint(Func<TItem, TProperty> selector)
-        {
-            _selector = selector;
-            _negationActive = false;
-        }
-        private FilteringEntryPoint(Func<TItem, TProperty> selector, bool negationActive)
+
+        public FilteringEntryPoint(Func<TItem, TProperty> selector) : this(selector, false)
+        {}
+
+        public FilteringEntryPoint(Func<TItem, TProperty> selector, bool negationActive)
         {
             _selector = selector;
             _negationActive = negationActive;

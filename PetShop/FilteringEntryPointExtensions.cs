@@ -1,4 +1,5 @@
 using System;
+using Training.DomainClasses;
 
 namespace Training.Specificaton
 {
@@ -6,9 +7,16 @@ namespace Training.Specificaton
     {
         public static ICriteria<TItem> EqualTo<TItem, TProperty>(this FilteringEntryPoint<TItem, TProperty> filteringEntryPoint, TProperty propertyValue)
         {
-            return new AnonymousCriteria<TItem>(item=> 
-                filteringEntryPoint._negationActive ? !filteringEntryPoint._selector(item).Equals(propertyValue): filteringEntryPoint._selector(item).Equals(propertyValue)
-                );
+            var resultCriteria = new AnonymousCriteria<TItem>(item => filteringEntryPoint._selector(item).Equals(propertyValue));
+            if (filteringEntryPoint._negationActive)
+            {
+                return new Negation<TItem>(resultCriteria);
+            }
+            else
+            {
+
+                return resultCriteria;
+            }
         }
 
         public static ICriteria<TItem> GreaterThan<TItem, TProperty>(this FilteringEntryPoint<TItem, TProperty> filteringEntryPoint, TProperty propertyValue) where TProperty : IComparable<TProperty>
