@@ -259,7 +259,6 @@ namespace Training.Specificaton
             foundPets.ShouldContainOnly(mouse_Jerry, rabbit_Fluffy);
         };
 
-
     }
 
 
