@@ -3,7 +3,7 @@ using Machine.Specifications;
 using Moq;
 using Moq.AutoMock;
 
-namespace Training.Specificaton
+namespace PetShop
 {
     public class Specification<TSystemUnderTest> where TSystemUnderTest : class
     {

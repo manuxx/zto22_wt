@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 
 
-namespace Training.Specificaton
+namespace PetShop
 {
     public static class CollectionExtensions
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using Machine.Specifications;
 using Machine.Specifications.Utility.Internal;
 
-namespace Training.Specificaton
+namespace PetShop
 {
     public static class AssertionExtensions
     {
