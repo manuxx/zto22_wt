@@ -4,6 +4,11 @@ namespace Training.DomainClasses
 {
     public class Pet : IEquatable<Pet>
     {
+        public bool IsGreaterThan(Pet other)
+        {
+            return this.yearOfBirth > other.yearOfBirth;
+        }
+
         public bool Equals(Pet other)
         {
             if (ReferenceEquals(null, other)) return false;
