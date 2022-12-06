@@ -234,7 +234,7 @@ namespace Training.Specificaton
        
         private It should_be_able_to_find_all_pets_born_after_2010 = () =>
         {
-            var criteria = Where<Pet>.HasAn(p => p.yearOfBirth).IsGreaterThan(2010);
+            var criteria = Where<Pet>.HasAn(p => p.yearOfBirth).GreaterThan(2010);
             var foundPets = subject.AllPets().ThatSatisfy(criteria);
             foundPets.ShouldContainOnly(dog_Pluto, rabbit_Fluffy, mouse_Dixie, mouse_Jerry);
         };
@@ -255,24 +255,6 @@ namespace Training.Specificaton
         };
 
 
-    }
-
-    internal class Where<TItem>
-    {
-        public static FilteringEntryPoint<TItem,TProperty> HasAn<TProperty>(Func<TItem, TProperty> selector) 
-        {
-            return new FilteringEntryPoint<TItem,TProperty>(selector);
-        }
-    }
-
-    internal class FilteringEntryPoint<TItem,TProperty> 
-    {
-        public readonly Func<TItem, TProperty> _selector;
-
-        public FilteringEntryPoint(Func<TItem, TProperty> selector)
-        {
-            _selector = selector;
-        }
     }
 
 
