@@ -201,15 +201,10 @@ namespace Training.Specificaton
     {
         private It should_be_able_to_find_all_cats = () =>
         {
-            ICriteria<Pet> criteria = Where(pet => pet.species).IsEqualTo(Species.Cat);
+            ICriteria<Pet> criteria = Where<Pet>.HasAn(pet => pet.species).IsEqualTo(Species.Cat);
             var foundPets = subject.AllPets().GetMatching(criteria);
             foundPets.ShouldContainOnly(cat_Tom, cat_Jinx);
         };
-
-        private static CriteriaBuilder Where(Func<Pet, Species> selector)
-        {
-            return new CriteriaBuilder(selector);
-        }
 
         private It should_be_able_to_find_all_mice = () =>
         {
@@ -255,22 +250,20 @@ namespace Training.Specificaton
             var foundPets = subject.AllPetsBornAfter2011OrRabbits();
             foundPets.ShouldContainOnly(mouse_Jerry, rabbit_Fluffy);
         };
-
-
     }
 
-    internal class CriteriaBuilder
+    internal class CriteriaBuilder<TItem>
     {
-        private readonly Func<Pet, Species> _selector;
+        private readonly Func<TItem, Species> _selector;
 
-        public CriteriaBuilder(Func<Pet, Species> selector)
+        public CriteriaBuilder<TItem>(Func<TItem, Species> selector)
         {
             _selector = selector;
         }
 
-        public ICriteria<Pet> IsEqualTo(Species species)
+        public ICriteria IsEqualTo<TItem>(Species species)
         {
-            return new AnonymousCriteria<Pet>(pet=>_selector(pet).Equals(species));
+            return new AnonymousCriteria<TItem>(pet=>_selector(pet).Equals(species));
         }
     }
 
@@ -287,4 +280,11 @@ namespace Training.Specificaton
         };
     };
 
+    class Where<TItem>
+    {
+        private static CriteriaBuilder HasAn(Func<TItem, Species> selector)
+        {
+            return new CriteriaBuilder(selector);
+        }
+    }
 }
