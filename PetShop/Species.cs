@@ -2,7 +2,7 @@
 
 namespace Training.DomainClasses
 {
-    public class Species
+    public class Species : IComparable<Species>
     {
         public static readonly Species Rabbit = new Species(3, EnviromentType.Cage);
         public static readonly Species Mouse = new Species(1, EnviromentType.Cage);
