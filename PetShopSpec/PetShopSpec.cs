@@ -234,7 +234,7 @@ namespace Training.Specificaton
        
         private It should_be_able_to_find_all_pets_born_after_2010 = () =>
         {
-            var criteria = Where<Pet>.HasAn(p => p.yearOfBirth).IsGreaterThan(2010);
+            var criteria = Where<Pet>.HasComparable(p => p.yearOfBirth).IsGreaterThan(2010);
             var foundPets = subject.AllPets().GetMatching(criteria);
             foundPets.ShouldContainOnly(dog_Pluto, rabbit_Fluffy, mouse_Dixie, mouse_Jerry);
         };
@@ -259,17 +259,21 @@ namespace Training.Specificaton
 
     internal class Where<TItem>
     {
-        public static CriteriaBuilder<TItem, TProperty> HasAn<TProperty>(Func<TItem, TProperty> selector) where TProperty : IComparable<TProperty>
+        public static CriteriaBuilder<TItem, TProperty> HasAn<TProperty>(Func<TItem, TProperty> selector)
         {
             return new CriteriaBuilder<TItem, TProperty>(selector);
         }
+        public static ComparableCriteriaBuilder<TItem, TProperty> HasComparable<TProperty>(Func<TItem, TProperty> selector) where TProperty : IComparable<TProperty>
+        {
+            return new ComparableCriteriaBuilder<TItem, TProperty>(selector);
+        }
     }
 
-    internal class CriteriaBuilder<TItem, TProperty> where TProperty : IComparable<TProperty>
+    internal class ComparableCriteriaBuilder<TItem, TProperty> where TProperty : IComparable<TProperty>
     {
         private readonly Func<TItem, TProperty> _selector;
 
-        public CriteriaBuilder(Func<TItem, TProperty> selector)
+        public ComparableCriteriaBuilder(Func<TItem, TProperty> selector)
         {
             _selector = selector;
         }
@@ -282,6 +286,21 @@ namespace Training.Specificaton
         public ICriteria<TItem> IsGreaterThan(TProperty value)
         {
             return new AnonymousCriteria<TItem>(item => _selector(item).CompareTo(value) > 0);
+        }
+    }
+
+    internal class CriteriaBuilder<TItem, TProperty>
+    {
+        private readonly Func<TItem, TProperty> _selector;
+
+        public CriteriaBuilder(Func<TItem, TProperty> selector)
+        {
+            _selector = selector;
+        }
+
+        public ICriteria<TItem> IsEqualTo(TProperty value)
+        {
+            return new AnonymousCriteria<TItem>(item => _selector(item).Equals(value));
         }
     }
 
