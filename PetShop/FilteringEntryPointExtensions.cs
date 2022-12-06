@@ -20,8 +20,8 @@ namespace Training.Specificaton
         public static FilteringEntryPoint<TItem, TProperty> Not<TItem, TProperty>(
             this FilteringEntryPoint<TItem, TProperty> filteringEntryPoint)
         {
-            filteringEntryPoint._negationActive = !filteringEntryPoint._negationActive;
-            return filteringEntryPoint;
+            var newNegationActive = !filteringEntryPoint._negationActive;
+            return new FilteringEntryPoint<TItem, TProperty>(filteringEntryPoint._selector, newNegationActive);
 
         }
     }
