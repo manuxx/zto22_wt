@@ -201,21 +201,21 @@ namespace Training.Specificaton
     {
         private It should_be_able_to_find_all_cats = () =>
         {
-            ICriteria<Pet> criteria = Where<Pet>.HasAn(pet => pet.species).IsEqualTo(Species.Cat);
+            ICriteria<Pet> criteria = CriteriaBuilderExtensions.IsEqualTo(Where<Pet>.HasAn(pet => pet.species), Species.Cat);
             var foundPets = subject.AllPets().GetMatching(criteria);
             foundPets.ShouldContainOnly(cat_Tom, cat_Jinx);
         };
 
         private It should_be_able_to_find_all_mice = () =>
         {
-            ICriteria<Pet> criteria = Where<Pet>.HasAn(pet => pet.species).IsEqualTo(Species.Mouse);
+            var criteria = CriteriaBuilderExtensions.IsEqualTo(Where<Pet>.HasAn(p=>p.species), Species.Mouse);
             var foundPets = subject.AllPets().GetMatching(criteria);
             foundPets.ShouldContainOnly(mouse_Dixie, mouse_Jerry);
         };
 
         private It should_be_able_to_find_all_female_pets = () =>
         {
-            ICriteria<Pet> criteria = Where<Pet>.HasAn(pet => pet.sex).IsEqualTo(Sex.Female);
+            var criteria = CriteriaBuilderExtensions.IsEqualTo(Where<Pet>.HasAn(p => p.sex), Sex.Female);
             var foundPets = subject.AllPets().GetMatching(criteria);
             foundPets.ShouldContainOnly(dog_Lassie, mouse_Dixie);
         };
@@ -234,7 +234,7 @@ namespace Training.Specificaton
        
         private It should_be_able_to_find_all_pets_born_after_2010 = () =>
         {
-            ICriteria<Pet> criteria = Where<Pet>.HasAn(pet => pet.yearOfBirth).IsGreaterThan(2010);
+            var criteria = CriteriaBuilderExtensions.IsGreaterThan(Where<Pet>.HasAn(p => p.yearOfBirth), 2010);
             var foundPets = subject.AllPets().GetMatching(criteria);
             foundPets.ShouldContainOnly(dog_Pluto, rabbit_Fluffy, mouse_Dixie, mouse_Jerry);
         };
@@ -257,29 +257,19 @@ namespace Training.Specificaton
 
     internal class Where<TItem>
     {
-        public static CriteriaBuilder<TItem, TProperty> HasAn<TProperty>(Func<TItem, TProperty> selector)
+        public static CriteriaBuilder<TItem,TProperty> HasAn<TProperty>(Func<TItem, TProperty> selector) 
         {
-            return new CriteriaBuilder<TItem, TProperty>(selector);
+            return new CriteriaBuilder<TItem,TProperty>(selector);
         }
     }
 
-    internal class CriteriaBuilder<TItem, TProperty>
+    internal class CriteriaBuilder<TItem,TProperty> 
     {
-        private readonly Func<TItem, TProperty> _selector;
+        public readonly Func<TItem, TProperty> _selector;
 
         public CriteriaBuilder(Func<TItem, TProperty> selector)
         {
             _selector = selector;
-        }
-
-        public ICriteria<TItem> IsEqualTo(TProperty species)
-        {
-            return new AnonymousCriteria<TItem>(item=>_selector(item).Equals(species));
-        }
-
-        public ICriteria<TItem> IsGreaterThan<TComparableProperty>(TComparableProperty value) where TComparableProperty : IComparable
-        {
-            return new AnonymousCriteria<TItem>(item => value.CompareTo(_selector(item)) < 0);
         }
     }
 
