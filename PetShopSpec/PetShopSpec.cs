@@ -79,8 +79,8 @@ namespace Training.Specificaton
     {
         Establish context = () =>
         {
-            fluffy_the_first = new Pet {name = "Fluffy"};
-            fluffy_the_second = new Pet {name = "Fluffy"};
+            fluffy_the_first = new Pet { name = "Fluffy" };
+            fluffy_the_second = new Pet { name = "Fluffy" };
             pet_initial_content.Add(fluffy_the_first);
         };
 
@@ -201,15 +201,11 @@ namespace Training.Specificaton
     {
         private It should_be_able_to_find_all_cats = () =>
         {
-            ICriteria<Pet> criteria = Where(pet => pet.species).IsEqualTo(Species.Cat);
+            ICriteria<Pet> criteria = Where<Pet>.HasAn(pet => pet.species).IsEqualTo(Species.Cat);
             var foundPets = subject.AllPets().GetMatching(criteria);
             foundPets.ShouldContainOnly(cat_Tom, cat_Jinx);
         };
 
-        private static CriteriaBuilder Where(Func<Pet, Species> selector)
-        {
-            return new CriteriaBuilder(selector);
-        }
 
         private It should_be_able_to_find_all_mice = () =>
         {
@@ -222,19 +218,19 @@ namespace Training.Specificaton
             var foundPets = subject.AllFemalePets();
             foundPets.ShouldContainOnly(dog_Lassie, mouse_Dixie);
         };
-        
+
         private It should_be_able_to_find_all_cats_or_dogs = () =>
         {
             var foundPets = subject.AllCatsOrDogs();
             foundPets.ShouldContainOnly(cat_Tom, cat_Jinx, dog_Huckelberry, dog_Lassie, dog_Pluto);
         };
-       
+
         private It should_be_able_to_find_all_pets_but_not_mice = () =>
         {
             var foundPets = subject.AllPetsButNotMice();
             foundPets.ShouldContainOnly(cat_Tom, cat_Jinx, dog_Huckelberry, dog_Lassie, dog_Pluto, rabbit_Fluffy);
         };
-       
+
         private It should_be_able_to_find_all_pets_born_after_2010 = () =>
         {
             var foundPets = subject.AllPetsBornAfter2010();
@@ -259,18 +255,26 @@ namespace Training.Specificaton
 
     }
 
-    internal class CriteriaBuilder
+    internal class Where<TItem>
     {
-        private readonly Func<Pet, Species> _selector;
+        public static CriteriaBuilder<TItem> HasAn(Func<TItem, Species> selector)
+        {
+            return new CriteriaBuilder<TItem>(selector);
+        }
+    }
 
-        public CriteriaBuilder(Func<Pet, Species> selector)
+    internal class CriteriaBuilder<TItem>
+    {
+        private readonly Func<TItem, Species> _selector;
+
+        public CriteriaBuilder(Func<TItem, Species> selector)
         {
             _selector = selector;
         }
 
-        public ICriteria<Pet> IsEqualTo(Species species)
+        public ICriteria<TItem> IsEqualTo(Species species)
         {
-            return new AnonymousCriteria<Pet>(pet=>_selector(pet).Equals(species));
+            return new AnonymousCriteria<TItem>(pet => _selector(pet).Equals(species));
         }
     }
 
