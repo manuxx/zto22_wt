@@ -257,24 +257,6 @@ namespace Training.Specificaton
 
     }
 
-    internal class Where<TItem>
-    {
-        public static CriteriaBuilder<TItem, TProperty> HasAn<TProperty>(Func<TItem, TProperty> selector)
-        {
-            return new CriteriaBuilder<TItem, TProperty>(selector);
-        }
-    }
-
-    internal class CriteriaBuilder<TItem, TProperty> 
-    {
-        public readonly Func<TItem, TProperty> _selector;
-
-        public CriteriaBuilder(Func<TItem, TProperty> selector)
-        {
-            _selector = selector;
-        }
-    }
-
 
     class when_sorting_pets : concern_with_pets_for_sorting_and_filtering
     {
