@@ -247,6 +247,9 @@ namespace Training.Specificaton
         private It should_be_able_to_find_all_pets_born_after_2010 = () =>
         {
             var foundPets = subject.AllPetsBornAfter2010();
+
+            var criteria = Where<Pet>.HasAn(p => p.yearOfBirth).IsGreaterThan(2010);
+
             foundPets.ShouldContainOnly(dog_Pluto, rabbit_Fluffy, mouse_Dixie, mouse_Jerry);
         };
         private It should_be_able_to_find_all_young_dogs = () =>
@@ -270,7 +273,7 @@ namespace Training.Specificaton
 
     }
 
-    internal class Where<TItem>
+    internal class Where<TItem> 
     {
         public static CriteriaBuilder<TItem, TProperty> HasAn<TProperty>(Func<TItem, TProperty> selector)
         {
@@ -280,17 +283,32 @@ namespace Training.Specificaton
 
     internal class CriteriaBuilder<TItem, TProperty>
     {
-        private readonly Func<TItem, TProperty> _selector;
+        
+        public readonly Func<TItem, TProperty> _selector;
 
         public CriteriaBuilder(Func<TItem, TProperty> selector)
         {
             _selector = selector;
         }
 
+<<<<<<< Updated upstream
         public ICriteria<TItem> IsEqualTo(TProperty species)
         {
             return new AnonymousCriteria<TItem>(pet=>_selector(pet).Equals(species));
         }
+>>>>>>> Stashed changes
+=======
+        public static ICriteria<TItem> IsEqualTo(TProperty value)
+        {
+            return new AnonymousCriteria<TItem>(item=>criteriaBuilder._selector(item).Equals(value));
+        }
+
+        public ICriteria<TItem> IsGreaterThan<TComparableProperty>(TComparableProperty value)
+                where TComparableProperty : IComparable<TProperty> 
+        {
+            return new AnonymousCriteria<TItem>(item => value.CompareTo(_selector(item)) < 0);
+        }
+        
 >>>>>>> Stashed changes
     }
 
