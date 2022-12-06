@@ -229,6 +229,7 @@ namespace Training.Specificaton
        
         private It should_be_able_to_find_all_pets_but_not_mice = () =>
         {
+            ICriteria<Pet> criteria = Where<Pet>.HasAn(pet => pet.species).Not().IsEqualTo(Species.Mouse);
             var foundPets = subject.AllPetsButNotMice();
             foundPets.ShouldContainOnly(cat_Tom, cat_Jinx, dog_Huckelberry, dog_Lassie, dog_Pluto, rabbit_Fluffy);
         };
@@ -260,20 +261,29 @@ namespace Training.Specificaton
 
     internal class Where<TItem>
     {
-        public static CriteriaBuilder<TItem, TProperty> HasAn<TProperty>(Func<TItem, TProperty> selector)
+        public static FilteringEnterpoint<TItem, TProperty> HasAn<TProperty>(Func<TItem, TProperty> selector)
         {
-            return new CriteriaBuilder<TItem, TProperty>(selector);
+            return new FilteringEnterpoint<TItem, TProperty>(selector);
         }
     }
 
-    internal class CriteriaBuilder<TItem, TProperty>
+    internal class FilteringEnterpoint<TItem, TProperty>
     {
         public readonly Func<TItem, TProperty> _selector;
+        public bool _negationActive;
 
-        public CriteriaBuilder(Func<TItem, TProperty> selector)
+        public FilteringEnterpoint(Func<TItem, TProperty> selector)
         {
             _selector = selector;
+            _negationActive = false;
         }
+
+        public FilteringEnterpoint<TItem,TProperty> Not()
+        {
+            _negationActive = !_negationActive;
+            return this;
+        }
+
     }
 
     class when_sorting_pets : concern_with_pets_for_sorting_and_filtering
