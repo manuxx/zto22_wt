@@ -261,13 +261,13 @@ namespace Training.Specificaton
 
     internal class Where<TItem>
     {
-        public static CriteriaBuilder<TItem,TProperty> HasAn<TProperty>(Func<TItem, TProperty> selector) where TProperty : IComparable<Tpr>
+        public static CriteriaBuilder<TItem,TProperty> HasAn<TProperty>(Func<TItem, TProperty> selector) 
         {
             return new CriteriaBuilder<TItem, TProperty>(selector);
         }
     }
 
-    internal class CriteriaBuilder<TItem, TProperty> where TProperty : IComparable<TProperty>
+    internal class CriteriaBuilder<TItem, TProperty> 
     {
         private readonly Func<TItem, TProperty> _selector;
 
@@ -281,9 +281,9 @@ namespace Training.Specificaton
             return new AnonymousCriteria<TItem>(item=>_selector(item).Equals(value));
         }
 
-        public ICriteria<TItem> IsGreaterThan(TProperty value)
+        public ICriteria<TItem> IsGreaterThan(IComparable value)
         {
-            return new AnonymousCriteria<TItem>(item => _selector(item).CompareTo(value) > 0);
+            return new AnonymousCriteria<TItem>(item => value.CompareTo(_selector(item)) < 0);
         }
     }
     
