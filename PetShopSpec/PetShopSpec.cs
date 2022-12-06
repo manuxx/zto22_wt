@@ -201,22 +201,22 @@ namespace Training.Specificaton
     {
         private It should_be_able_to_find_all_cats = () =>
         {
-            ICriteria<Pet> criteria = Where<Pet>.HasAn<Species>(pet => pet.species).IsEqualTo(Species.Cat);
-            var foundPets = subject.AllPets().GetMatching(criteria);
+            ICriteria<Pet> criteria = Where<Pet>.HasAn(pet => pet.species).EqualTo(Species.Cat);
+            var foundPets = subject.AllPets().ThatSatisfy(criteria);
             foundPets.ShouldContainOnly(cat_Tom, cat_Jinx);
         };
 
         private It should_be_able_to_find_all_mice = () =>
         {
-            ICriteria<Pet> criteria = Where<Pet>.HasAn<Species>(pet => pet.species).IsEqualTo(Species.Mouse);
-            var foundPets = subject.AllPets().GetMatching(criteria);
+            var criteria = Where<Pet>.HasAn(p=>p.species).EqualTo(Species.Mouse);
+            var foundPets = subject.AllPets().ThatSatisfy(criteria);
             foundPets.ShouldContainOnly(mouse_Dixie, mouse_Jerry);
         };
 
         private It should_be_able_to_find_all_female_pets = () =>
         {
-            ICriteria<Pet> criteria = Where<Pet>.HasAn<Sex>(pet => pet.sex).IsEqualTo(Sex.Female);
-            var foundPets = subject.AllPets().GetMatching(criteria);
+            var criteria = Where<Pet>.HasAn(p => p.sex).EqualTo(Sex.Female);
+            var foundPets = subject.AllPets().ThatSatisfy(criteria);
             foundPets.ShouldContainOnly(dog_Lassie, mouse_Dixie);
         };
         
@@ -234,8 +234,8 @@ namespace Training.Specificaton
        
         private It should_be_able_to_find_all_pets_born_after_2010 = () =>
         {
-            var criteria = Where<Pet>.HasAn<int>(pet => pet.yearOfBirth).IsGreaterThan(2010);
-            var foundPets = subject.AllPets().GetMatching(criteria);
+            var criteria = Where<Pet>.HasAn(p => p.yearOfBirth).GreaterThan(2010);
+            var foundPets = subject.AllPets().ThatSatisfy(criteria);
             foundPets.ShouldContainOnly(dog_Pluto, rabbit_Fluffy, mouse_Dixie, mouse_Jerry);
         };
         private It should_be_able_to_find_all_young_dogs = () =>
@@ -255,34 +255,6 @@ namespace Training.Specificaton
         };
 
 
-    }
-
-    internal class Where<TItem>
-    {
-        public static CriteriaBuilder<TItem, TProperty> HasAn<TProperty>(Func<TItem, TProperty> selector)
-        {
-            return new CriteriaBuilder<TItem, TProperty>(selector);
-        }
-    }
-
-    internal class CriteriaBuilder<TItem, TProperty>
-    {
-        private readonly Func<TItem, TProperty> _selector;
-
-        public CriteriaBuilder(Func<TItem, TProperty> selector)
-        {
-            _selector = selector;
-        }
-
-        public ICriteria<TItem> IsEqualTo(TProperty value)
-        {
-            return new AnonymousCriteria<TItem>(item=>_selector(item).Equals(value));
-        }
-        
-        public ICriteria<TItem> IsGreaterThan(IComparable<TProperty> value)
-        {
-            return new AnonymousCriteria<TItem>(item => value.CompareTo(_selector(item)) < 0);
-        }
     }
 
 
