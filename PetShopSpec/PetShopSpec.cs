@@ -227,6 +227,7 @@ namespace Training.Specificaton
        
         private It should_be_able_to_find_all_pets_but_not_mice = () =>
         {
+            ICriteria<Pet> criteria = Where<Pet>.HasAn(p => p.species).Not().IsEqualTo(Species.Mouse);
             var foundPets = subject.AllPetsButNotMice();
             foundPets.ShouldContainOnly(cat_Tom, cat_Jinx, dog_Huckelberry, dog_Lassie, dog_Pluto, rabbit_Fluffy);
         };
