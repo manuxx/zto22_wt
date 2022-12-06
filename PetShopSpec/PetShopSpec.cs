@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Training.DomainClasses;
 using Machine.Specifications;
 using It = Machine.Specifications.It;
@@ -196,6 +197,14 @@ namespace Training.Specificaton
         protected static Pet dog_Pluto;
     }
 
+    public class Where<TItem>
+    {
+
+        public static CriteriaBuilder<TItem,TProperty> HasAn<TProperty>(Func<TItem, TProperty> selector)
+        {
+            return new CriteriaBuilder<TItem,TProperty>(selector);
+        }
+    }
 
     public class when_searching_for_pets : concern_with_pets_for_sorting_and_filtering
     {
@@ -206,19 +215,16 @@ namespace Training.Specificaton
             foundPets.ShouldContainOnly(cat_Tom, cat_Jinx);
         };
 
-        private static CriteriaBuilder Where(Func<Pet, Species> selector)
-        {
-            return new CriteriaBuilder(selector);
-        }
-
         private It should_be_able_to_find_all_mice = () =>
         {
-            var foundPets = subject.AllMice();
+            var criteria = Where<Pet>.HasAn(pet => pet.species).IsEqualTo(Species.Mouse);
+            var foundPets = subject.AllPets().GetMatching(criteria);
             foundPets.ShouldContainOnly(mouse_Dixie, mouse_Jerry);
         };
 
         private It should_be_able_to_find_all_female_pets = () =>
         {
+            var criteria = Where<Pet>.HasAn(pet => pet.sex).IsEqualTo(Sex.Female);
             var foundPets = subject.AllFemalePets();
             foundPets.ShouldContainOnly(dog_Lassie, mouse_Dixie);
         };
@@ -259,18 +265,18 @@ namespace Training.Specificaton
 
     }
 
-    internal class CriteriaBuilder
+    public class CriteriaBuilder<TItem, TProperty>
     {
-        private readonly Func<Pet, Species> _selector;
+        private readonly Func<TItem, TProperty> _selector;
 
-        public CriteriaBuilder(Func<Pet, Species> selector)
+        public CriteriaBuilder(Func<TItem, TProperty> selector)
         {
             _selector = selector;
         }
 
-        public ICriteria<Pet> IsEqualTo(Species species)
+        public ICriteria<TItem> IsEqualTo(TProperty species)
         {
-            return new AnonymousCriteria<Pet>(pet=>_selector(pet).Equals(species));
+            return new AnonymousCriteria<TItem>(pet=>_selector(pet).Equals(species));
         }
     }
 
