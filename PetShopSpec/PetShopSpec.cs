@@ -216,13 +216,19 @@ namespace Training.Specificaton
 
         private It should_be_able_to_find_all_mice = () =>
         {
-            var foundPets = subject.AllMice();
+            var criteria = Where<Pet>.HasAn(p => p.species).IsEqualTo(Species.Mouse);
+            
+
+            var foundPets = subject.AllPets().GetMatching(criteria);
+
             foundPets.ShouldContainOnly(mouse_Dixie, mouse_Jerry);
         };
 
         private It should_be_able_to_find_all_female_pets = () =>
         {
-            var foundPets = subject.AllFemalePets();
+            var criteria = Where<Pet>.HasAn(p => p.sex).IsEqualTo(Sex.Female);
+
+            var foundPets = subject.AllPets().GetMatching(criteria);
             foundPets.ShouldContainOnly(dog_Lassie, mouse_Dixie);
         };
         
@@ -259,6 +265,33 @@ namespace Training.Specificaton
             foundPets.ShouldContainOnly(mouse_Jerry, rabbit_Fluffy);
         };
 
+<<<<<<< Updated upstream
+=======
+
+    }
+
+    internal class Where<TItem>
+    {
+        public static CriteriaBuilder<TItem, TProperty> HasAn<TProperty>(Func<TItem, TProperty> selector)
+        {
+            return new CriteriaBuilder<TItem, TProperty>(selector);
+        }
+    }
+
+    internal class CriteriaBuilder<TItem, TProperty>
+    {
+        private readonly Func<TItem, TProperty> _selector;
+
+        public CriteriaBuilder(Func<TItem, TProperty> selector)
+        {
+            _selector = selector;
+        }
+
+        public ICriteria<TItem> IsEqualTo(TProperty species)
+        {
+            return new AnonymousCriteria<TItem>(pet=>_selector(pet).Equals(species));
+        }
+>>>>>>> Stashed changes
     }
 
 
